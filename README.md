@@ -1,6 +1,6 @@
-# 2007 Bowie Move Planner — Key-Free Build
+# 2007 Bowie Move Planner — Dimensions Build
 
-This build includes the move checklist, floorplan views, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+This build includes the move checklist, floorplan views, an easy-to-read room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
 
 ## Upload to GitHub
 
@@ -29,6 +29,8 @@ Use **All rooms** to see room sections together, or choose one room to filter th
 ## Storage behavior
 
 Inspiration photos and their details are stored in Netlify Blobs, so they sync across devices. Adding and deleting ideas does not require a password or private key.
+
+Friends who open the same live Netlify site can add photos, and those photos will appear for everyone visiting that site. A custom domain and the site's `netlify.app` address also share the gallery when both point to this same Netlify project. A separate copy deployed as a different Netlify project has its own separate gallery.
 
 The checklist is stored in the current browser. Checklist progress will not automatically sync to another device.
 
