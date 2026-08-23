@@ -1,30 +1,36 @@
-# 2007 Bowie Move Planner
+# 2007 Bowie Move Planner - Build 2
 
-A self-contained, mobile-friendly move planner with:
+This version adds room-based inspiration filters and cross-device photo uploads using Netlify Blobs.
 
-- A dated moving checklist
-- Progress tracking
-- Proposed and clean floorplan views
-- A starter design-inspiration board
-- Device-local saving for checklist changes and added ideas
+## Upload to GitHub
 
-## Add to GitHub
+Upload every file and folder in this package to the root of your GitHub repository. Preserve the `site` and `netlify/functions` folders exactly as shown.
 
-1. Create an empty GitHub repository.
-2. Upload every file from this folder to the repository root.
-3. Commit the files to the main branch.
+## Connect to Netlify
 
-## Deploy with Netlify
+1. Import the GitHub repository into Netlify.
+2. Netlify will read `netlify.toml`; no build command is required.
+3. Open **Project configuration**, then **Environment variables**.
+4. Add a variable named `INSPIRATION_ADMIN_KEY`.
+5. Set its value to a long private passphrase that only you know.
+6. Redeploy the site after adding the environment variable.
 
-1. In Netlify, choose **Add new project** and **Import an existing project**.
-2. Select GitHub and choose this repository.
-3. Leave the build command blank.
-4. Use `.` as the publish directory if Netlify does not detect it automatically.
-5. Choose **Deploy**.
+Use that same passphrase in the site's **Private upload key** field whenever you upload or delete an inspiration item. The passphrase is checked by the server and is not included in the website files.
 
-The included `netlify.toml` normally supplies the publish directory automatically.
+## Inspiration rooms
 
-## Important storage note
+- Living/Dining
+- Bedroom
+- Kitchen
+- Desk Nook
+- Bathroom
+- WIC
+- Terrace
 
-This first build saves checklist changes and added ideas in the visitor's browser. Data does not sync between devices and can be lost if browser storage is cleared. A later build can add an account and cloud database for cross-device syncing.
+When **All rooms** is selected, ideas are grouped into room sections. Selecting a room shows only that room.
 
+## Storage and privacy
+
+Photos and inspiration metadata are stored in Netlify Blobs and sync across devices. The gallery is publicly viewable because the website is public. Uploads and deletions require `INSPIRATION_ADMIN_KEY`.
+
+The move checklist still uses browser storage and therefore remains specific to each browser/device in this build.
