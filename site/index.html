@@ -214,7 +214,7 @@
     <section class="mh-panel" data-view="overview">
       <div class="mh-section-head">
         <div><h2>This week</h2><div class="mh-small">Your moving plan at a glance</div></div>
-        <span class="mh-chip">5 days to go</span>
+        <span class="mh-chip">4 days to go</span>
       </div>
       <div class="mh-grid">
         <article class="mh-surface mh-progress-card">
@@ -317,10 +317,6 @@
             <select class="mh-select" id="mh-inspo-status" name="status"><option>Idea</option><option>Considering</option><option>Purchased</option><option>Rejected</option></select>
           </div>
           <div class="mh-field">
-            <label for="mh-admin-key">Private upload key</label>
-            <input class="mh-input" id="mh-admin-key" name="adminKey" type="password" autocomplete="current-password" placeholder="Configured in Netlify" required>
-          </div>
-          <div class="mh-field">
             <label for="mh-inspo-source">Pinterest or source URL</label>
             <input class="mh-input" id="mh-inspo-source" name="sourceUrl" type="url" placeholder="https://…">
           </div>
@@ -341,7 +337,7 @@
       </form>
       <div class="mh-room-filters" id="mh-room-filters" aria-label="Filter inspiration by room"></div>
       <div id="mh-inspiration-sections" aria-live="polite"><div class="mh-empty">Loading inspiration…</div></div>
-      <p class="mh-footer-note">Uploaded photos sync across devices. The gallery is public; uploading and deleting require your private Netlify key.</p>
+      <p class="mh-footer-note">Uploaded photos sync across your devices through Netlify. Add and organize ideas directly—no sign-in or key required.</p>
     </section>
   </main>
 </div>
@@ -613,20 +609,17 @@
   }
 
   async function deleteIdea(item) {
-    let adminKey = sessionStorage.getItem('bowie-inspiration-admin-key') || '';
-    if (!adminKey) adminKey = window.prompt('Enter your private upload key to delete this idea:') || '';
-    if (!adminKey || !window.confirm('Delete “' + item.title + '”?')) return;
+    if (!window.confirm('Delete “' + item.title + '”?')) return;
     try {
       const response = await fetch('/.netlify/functions/inspiration', {
         method: 'DELETE',
-        headers: { 'content-type': 'application/json', 'x-admin-key': adminKey },
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ id: item.id })
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || 'Delete failed');
       }
-      sessionStorage.setItem('bowie-inspiration-admin-key', adminKey);
       inspirationItems = inspirationItems.filter((idea) => idea.id !== item.id);
       renderInspiration();
     } catch (error) {
@@ -651,21 +644,17 @@
       const payload = new FormData();
       payload.append('image', image);
       ['title', 'room', 'status', 'sourceUrl', 'productUrl', 'notes'].forEach((name) => payload.append(name, form.elements[name].value.trim()));
-      const adminKey = form.elements.adminKey.value;
       const response = await fetch('/.netlify/functions/inspiration', {
         method: 'POST',
-        headers: { 'x-admin-key': adminKey },
         body: payload
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Upload failed');
-      sessionStorage.setItem('bowie-inspiration-admin-key', adminKey);
       inspirationItems.unshift(data.item);
       activeRoom = data.item.room;
       renderRoomFilters();
       renderInspiration();
       form.reset();
-      form.elements.adminKey.value = adminKey;
       form.classList.remove('is-open');
       root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', 'false');
       uploadStatus('Saved.');
@@ -676,8 +665,6 @@
     }
   });
 
-  const rememberedKey = sessionStorage.getItem('bowie-inspiration-admin-key');
-  if (rememberedKey) root.querySelector('#mh-admin-key').value = rememberedKey;
   restoreState();
   updateProgress();
   renderRoomFilters();

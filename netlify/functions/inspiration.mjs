@@ -24,12 +24,6 @@ function json(value, status = 200) {
   });
 }
 
-function isAuthorized(request) {
-  const expected = process.env.INSPIRATION_ADMIN_KEY;
-  const supplied = request.headers.get("x-admin-key");
-  return Boolean(expected && supplied && supplied === expected);
-}
-
 function cleanText(value, maximum) {
   return String(value || "").trim().slice(0, maximum);
 }
@@ -86,10 +80,6 @@ export default async function handler(request) {
   if (request.method === "GET") {
     const items = await getItems(metadata);
     return json({ items: items.map(withImageUrl) });
-  }
-
-  if (!isAuthorized(request)) {
-    return json({ error: "Incorrect private upload key." }, 401);
   }
 
   if (request.method === "POST") {
@@ -153,4 +143,3 @@ export default async function handler(request) {
 
   return json({ error: "Method not allowed." }, 405);
 }
-
