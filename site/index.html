@@ -197,10 +197,15 @@
   #move-home .mh-inspo-copy p { margin: 6px 0 0; color: var(--mh-muted); font-size: 12px; }
   #move-home .mh-inspo-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   #move-home .mh-inspo-links a { color: var(--mh-green); font-size: 12px; }
-  #move-home .mh-delete-idea { margin-top: 11px; border: 0; background: transparent; color: var(--mh-amber); padding: 0; font-size: 11px; }
+  #move-home .mh-idea-actions { display: flex; gap: 12px; margin-top: 11px; }
+  #move-home .mh-edit-idea, #move-home .mh-delete-idea { border: 0; background: transparent; padding: 0; font-size: 11px; }
+  #move-home .mh-edit-idea { color: var(--mh-green); }
+  #move-home .mh-delete-idea { color: var(--mh-amber); }
   #move-home .mh-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; background: var(--mh-green-soft); color: var(--mh-green); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
   #move-home .mh-add-form { display: none; margin: 0 0 14px; padding: 12px; background: var(--mh-surface-2); border-radius: 14px; }
   #move-home .mh-add-form.is-open { display: block; }
+  #move-home .mh-form-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+  #move-home .mh-form-head strong { font-size: 13px; }
   #move-home .mh-form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 10px; }
   #move-home .mh-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   #move-home .mh-field-full { grid-column: 1 / -1; }
@@ -398,9 +403,10 @@
         <button class="mh-action" id="mh-open-inspo" type="button" aria-expanded="false">Add inspiration</button>
       </div>
       <form class="mh-add-form" id="mh-inspo-form">
+        <div class="mh-form-head"><strong id="mh-form-mode">Add inspiration</strong><span class="mh-small" id="mh-form-hint">Add a photo and any details you want to keep.</span></div>
         <div class="mh-form-grid">
           <div class="mh-field mh-field-full">
-            <label for="mh-inspo-file">Photo</label>
+            <label for="mh-inspo-file" id="mh-inspo-file-label">Photo</label>
             <input class="mh-input" id="mh-inspo-file" name="image" type="file" accept="image/jpeg,image/png,image/webp">
           </div>
           <div class="mh-field">
@@ -772,6 +778,7 @@
   const inspirationRooms = ['Living/Dining', 'Bedroom', 'Kitchen', 'Desk Nook', 'Bathroom', 'WIC', 'Terrace'];
   let inspirationItems = [];
   let activeRoom = 'All rooms';
+  let editingIdeaId = '';
 
   function safeLink(value) {
     if (!value) return null;
@@ -826,12 +833,20 @@
       links.append(product);
     }
     if (links.children.length) copy.append(links);
+    const actions = document.createElement('div');
+    actions.className = 'mh-idea-actions';
+    const edit = document.createElement('button');
+    edit.className = 'mh-edit-idea';
+    edit.type = 'button';
+    edit.textContent = 'Edit idea';
+    edit.addEventListener('click', () => startEditIdea(item));
     const remove = document.createElement('button');
     remove.className = 'mh-delete-idea';
     remove.type = 'button';
     remove.textContent = 'Delete idea';
     remove.addEventListener('click', () => deleteIdea(item));
-    copy.append(remove);
+    actions.append(edit, remove);
+    copy.append(actions);
     article.append(visual, copy);
     return article;
   }
@@ -951,16 +966,64 @@
     saveState();
   });
 
+  function closeInspirationForm() {
+    const form = root.querySelector('#mh-inspo-form');
+    form.classList.remove('is-open');
+    root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', 'false');
+  }
+
+  function resetInspirationForm() {
+    const form = root.querySelector('#mh-inspo-form');
+    form.reset();
+    editingIdeaId = '';
+    root.querySelector('#mh-form-mode').textContent = 'Add inspiration';
+    root.querySelector('#mh-form-hint').textContent = 'Add a photo and any details you want to keep.';
+    root.querySelector('#mh-inspo-file-label').textContent = 'Photo';
+    root.querySelector('#mh-save-inspo').textContent = 'Upload and save';
+    uploadStatus('');
+  }
+
+  function openInspirationForm() {
+    const form = root.querySelector('#mh-inspo-form');
+    form.classList.add('is-open');
+    root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', 'true');
+  }
+
+  function startEditIdea(item) {
+    const form = root.querySelector('#mh-inspo-form');
+    editingIdeaId = item.id;
+    form.elements.title.value = item.title === 'Untitled idea' ? '' : (item.title || '');
+    form.elements.room.value = item.room || 'Living/Dining';
+    form.elements.status.value = item.status || 'Idea';
+    form.elements.sourceUrl.value = item.sourceUrl || '';
+    form.elements.productUrl.value = item.productUrl || '';
+    form.elements.notes.value = item.notes || '';
+    form.elements.image.value = '';
+    root.querySelector('#mh-form-mode').textContent = 'Edit inspiration';
+    root.querySelector('#mh-form-hint').textContent = 'Keep the current photo or choose a replacement.';
+    root.querySelector('#mh-inspo-file-label').textContent = 'Replace photo (optional)';
+    root.querySelector('#mh-save-inspo').textContent = 'Save changes';
+    uploadStatus('');
+    openInspirationForm();
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    root.querySelector('#mh-inspo-title').focus({ preventScroll: true });
+  }
+
   root.querySelector('#mh-open-inspo').addEventListener('click', () => {
     const form = root.querySelector('#mh-inspo-form');
-    form.classList.toggle('is-open');
-    root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', String(form.classList.contains('is-open')));
-    if (form.classList.contains('is-open')) root.querySelector('#mh-inspo-title').focus();
+    if (form.classList.contains('is-open')) {
+      closeInspirationForm();
+      resetInspirationForm();
+      return;
+    }
+    resetInspirationForm();
+    openInspirationForm();
+    root.querySelector('#mh-inspo-title').focus();
   });
 
   root.querySelector('#mh-cancel-inspo').addEventListener('click', () => {
-    root.querySelector('#mh-inspo-form').classList.remove('is-open');
-    root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', 'false');
+    closeInspirationForm();
+    resetInspirationForm();
   });
 
   function uploadStatus(message) {
@@ -1004,6 +1067,10 @@
         throw new Error(data.error || 'Delete failed');
       }
       inspirationItems = inspirationItems.filter((idea) => idea.id !== item.id);
+      if (editingIdeaId === item.id) {
+        closeInspirationForm();
+        resetInspirationForm();
+      }
       renderInspiration();
     } catch (error) {
       window.alert(error.message || 'Delete failed');
@@ -1015,34 +1082,41 @@
     const form = event.currentTarget;
     const submit = root.querySelector('#mh-save-inspo');
     const selected = root.querySelector('#mh-inspo-file').files[0];
-    if (!selected) { uploadStatus('Choose a photo first.'); return; }
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) { uploadStatus('Use a JPEG, PNG, or WebP image.'); return; }
-    if (selected.size > 15 * 1024 * 1024) { uploadStatus('Choose an image smaller than 15 MB.'); return; }
+    const wasEditing = Boolean(editingIdeaId);
+    if (!wasEditing && !selected) { uploadStatus('Choose a photo first.'); return; }
+    if (selected && !['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) { uploadStatus('Use a JPEG, PNG, or WebP image.'); return; }
+    if (selected && selected.size > 15 * 1024 * 1024) { uploadStatus('Choose an image smaller than 15 MB.'); return; }
     submit.disabled = true;
-    uploadStatus('Preparing photo…');
+    uploadStatus(selected ? 'Preparing photo…' : 'Saving changes…');
     try {
-      const image = await compressImage(selected);
-      if (image.size > 5 * 1024 * 1024) throw new Error('The compressed image is still too large. Choose a smaller photo.');
-      uploadStatus('Uploading…');
       const payload = new FormData();
-      payload.append('image', image);
+      if (selected) {
+        const image = await compressImage(selected);
+        if (image.size > 5 * 1024 * 1024) throw new Error('The compressed image is still too large. Choose a smaller photo.');
+        payload.append('image', image);
+        uploadStatus(wasEditing ? 'Uploading replacement…' : 'Uploading…');
+      }
+      if (wasEditing) payload.append('id', editingIdeaId);
       ['title', 'room', 'status', 'sourceUrl', 'productUrl', 'notes'].forEach((name) => payload.append(name, form.elements[name].value.trim()));
       const response = await fetch('/.netlify/functions/inspiration', {
-        method: 'POST',
+        method: wasEditing ? 'PATCH' : 'POST',
         body: payload
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || 'Upload failed');
-      inspirationItems.unshift(data.item);
+      if (!response.ok) throw new Error(data.error || (wasEditing ? 'Update failed' : 'Upload failed'));
+      if (wasEditing) {
+        const index = inspirationItems.findIndex((item) => item.id === data.item.id);
+        if (index !== -1) inspirationItems[index] = data.item;
+      } else {
+        inspirationItems.unshift(data.item);
+      }
       activeRoom = data.item.room;
       renderRoomFilters();
       renderInspiration();
-      form.reset();
-      form.classList.remove('is-open');
-      root.querySelector('#mh-open-inspo').setAttribute('aria-expanded', 'false');
-      uploadStatus('Saved.');
+      closeInspirationForm();
+      resetInspirationForm();
     } catch (error) {
-      uploadStatus(error.message || 'Upload failed.');
+      uploadStatus(error.message || (wasEditing ? 'Update failed.' : 'Upload failed.'));
     } finally {
       submit.disabled = false;
     }

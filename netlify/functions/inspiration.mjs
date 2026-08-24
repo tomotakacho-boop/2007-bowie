@@ -126,6 +126,54 @@ export default async function handler(request) {
     return json({ item: withImageUrl(item) }, 201);
   }
 
+  if (request.method === "PATCH") {
+    let form;
+    try {
+      form = await request.formData();
+    } catch {
+      return json({ error: "The update could not be read." }, 400);
+    }
+
+    const id = cleanText(form.get("id"), 50);
+    const items = await getItems(metadata);
+    const index = items.findIndex((entry) => entry.id === id);
+    if (index === -1) return json({ error: "Idea not found." }, 404);
+
+    const title = cleanText(form.get("title"), 100) || "Untitled idea";
+    const room = cleanText(form.get("room"), 40);
+    const status = cleanText(form.get("status"), 30) || "Idea";
+    if (!ROOMS.has(room)) return json({ error: "Choose a valid room." }, 400);
+    if (!STATUSES.has(status)) return json({ error: "Choose a valid status." }, 400);
+
+    const existing = items[index];
+    const replacement = form.get("image");
+    let imageKey = existing.imageKey;
+    if (replacement && typeof replacement.arrayBuffer === "function" && replacement.size > 0) {
+      if (!IMAGE_TYPES.has(replacement.type)) return json({ error: "Use a JPEG, PNG, or WebP image." }, 400);
+      if (replacement.size > 5 * 1024 * 1024) return json({ error: "The uploaded image must be under 5 MB." }, 413);
+      imageKey = `${crypto.randomUUID()}.${IMAGE_TYPES.get(replacement.type)}`;
+      await images.set(imageKey, await replacement.arrayBuffer(), {
+        metadata: { contentType: replacement.type, originalName: cleanText(replacement.name, 200) },
+      });
+      await images.delete(existing.imageKey);
+    }
+
+    const updated = {
+      ...existing,
+      imageKey,
+      title,
+      room,
+      status,
+      notes: cleanText(form.get("notes"), 500),
+      sourceUrl: cleanUrl(form.get("sourceUrl")),
+      productUrl: cleanUrl(form.get("productUrl")),
+      updatedAt: new Date().toISOString(),
+    };
+    items[index] = updated;
+    await metadata.setJSON("items", items);
+    return json({ item: withImageUrl(updated) });
+  }
+
   if (request.method === "DELETE") {
     let body;
     try {
