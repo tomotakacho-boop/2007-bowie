@@ -29,8 +29,10 @@ function cleanText(value, maximum) {
 }
 
 function cleanUrl(value) {
-  const text = cleanText(value, 1500);
+  let text = cleanText(value, 1500);
   if (!text) return "";
+  if (["n/a", "na", "none", "-"].includes(text.toLowerCase())) return "";
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(text)) text = `https://${text}`;
   try {
     const url = new URL(text);
     return url.protocol === "http:" || url.protocol === "https:" ? url.href : "";
@@ -91,13 +93,12 @@ export default async function handler(request) {
     }
 
     const image = form.get("image");
-    const title = cleanText(form.get("title"), 100);
+    const title = cleanText(form.get("title"), 100) || "Untitled idea";
     const room = cleanText(form.get("room"), 40);
     const status = cleanText(form.get("status"), 30) || "Idea";
     if (!image || typeof image.arrayBuffer !== "function") return json({ error: "Choose a photo." }, 400);
     if (!IMAGE_TYPES.has(image.type)) return json({ error: "Use a JPEG, PNG, or WebP image." }, 400);
     if (image.size > 5 * 1024 * 1024) return json({ error: "The uploaded image must be under 5 MB." }, 413);
-    if (!title) return json({ error: "Add an idea title." }, 400);
     if (!ROOMS.has(room)) return json({ error: "Choose a valid room." }, 400);
     if (!STATUSES.has(status)) return json({ error: "Choose a valid status." }, 400);
 

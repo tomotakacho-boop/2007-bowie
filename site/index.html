@@ -199,14 +199,16 @@
   #move-home .mh-inspo-links a { color: var(--mh-green); font-size: 12px; }
   #move-home .mh-delete-idea { margin-top: 11px; border: 0; background: transparent; color: var(--mh-amber); padding: 0; font-size: 11px; }
   #move-home .mh-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; background: var(--mh-green-soft); color: var(--mh-green); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
-  #move-home .mh-add-form { display: none; margin: 0 0 18px; padding: 16px; background: var(--mh-surface-2); border-radius: 14px; }
+  #move-home .mh-add-form { display: none; margin: 0 0 14px; padding: 12px; background: var(--mh-surface-2); border-radius: 14px; }
   #move-home .mh-add-form.is-open { display: block; }
-  #move-home .mh-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  #move-home .mh-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  #move-home .mh-form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 10px; }
+  #move-home .mh-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   #move-home .mh-field-full { grid-column: 1 / -1; }
-  #move-home .mh-field label { color: var(--mh-muted); font-size: 12px; }
-  #move-home .mh-field textarea { min-height: 76px; resize: vertical; }
-  #move-home .mh-form-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+  #move-home .mh-field label { color: var(--mh-muted); font-size: 11px; }
+  #move-home .mh-field .mh-input, #move-home .mh-field .mh-select { flex: 0 0 auto; width: 100%; min-height: 38px; padding: 7px 9px; }
+  #move-home .mh-field input[type="file"] { min-height: 34px; padding: 5px 7px; font-size: 12px; }
+  #move-home .mh-field textarea.mh-input { min-height: 58px; max-height: 120px; resize: vertical; }
+  #move-home .mh-form-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
   #move-home .mh-upload-status { color: var(--mh-muted); font-size: 12px; }
   #move-home .mh-empty { padding: 26px; text-align: center; color: var(--mh-muted); background: var(--mh-surface); border: 1px dashed var(--mh-line); border-radius: 14px; }
   #move-home .mh-footer-note { margin: 17px 0 0; color: var(--mh-muted); font-size: 11px; }
@@ -399,15 +401,15 @@
         <div class="mh-form-grid">
           <div class="mh-field mh-field-full">
             <label for="mh-inspo-file">Photo</label>
-            <input class="mh-input" id="mh-inspo-file" name="image" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <input class="mh-input" id="mh-inspo-file" name="image" type="file" accept="image/jpeg,image/png,image/webp">
           </div>
           <div class="mh-field">
-            <label for="mh-inspo-title">Idea title</label>
-            <input class="mh-input" id="mh-inspo-title" name="title" type="text" placeholder="Warm neutral seating" maxlength="100" required>
+            <label for="mh-inspo-title">Idea title <span class="mh-small">(optional)</span></label>
+            <input class="mh-input" id="mh-inspo-title" name="title" type="text" placeholder="Warm neutral seating" maxlength="100">
           </div>
           <div class="mh-field">
             <label for="mh-inspo-room">Room</label>
-            <select class="mh-select" id="mh-inspo-room" name="room" required>
+            <select class="mh-select" id="mh-inspo-room" name="room">
               <option>Living/Dining</option><option>Bedroom</option><option>Kitchen</option><option>Desk Nook</option><option>Bathroom</option><option>WIC</option><option>Terrace</option>
             </select>
           </div>
@@ -416,12 +418,12 @@
             <select class="mh-select" id="mh-inspo-status" name="status"><option>Idea</option><option>Considering</option><option>Purchased</option><option>Rejected</option></select>
           </div>
           <div class="mh-field">
-            <label for="mh-inspo-source">Pinterest or source URL</label>
-            <input class="mh-input" id="mh-inspo-source" name="sourceUrl" type="url" placeholder="https://…">
+            <label for="mh-inspo-source">Pinterest or source <span class="mh-small">(optional)</span></label>
+            <input class="mh-input" id="mh-inspo-source" name="sourceUrl" type="text" inputmode="url" placeholder="pinterest.com/…">
           </div>
           <div class="mh-field">
-            <label for="mh-inspo-product">Product URL</label>
-            <input class="mh-input" id="mh-inspo-product" name="productUrl" type="url" placeholder="https://…">
+            <label for="mh-inspo-product">Product link <span class="mh-small">(optional)</span></label>
+            <input class="mh-input" id="mh-inspo-product" name="productUrl" type="text" inputmode="url" placeholder="store.com/item">
           </div>
           <div class="mh-field mh-field-full">
             <label for="mh-inspo-notes">Notes</label>

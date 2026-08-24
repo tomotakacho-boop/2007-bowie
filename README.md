@@ -1,6 +1,8 @@
-# 2007 Bowie Move Planner — Blueprint-Accurate Build
+# 2007 Bowie Move Planner — Compact Inspiration Build
 
 This build includes the move checklist, an inch-scaled graph-paper floor planner traced directly from the clean 2007 Bowie blueprint, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+
+The inspiration form is now compact and has no HTML required markers. Idea titles and links are optional. Source and product fields accept either full URLs or plain domains such as `thecontainerstore.com`; common placeholders such as `n/a` are treated as blank. A photo is still needed to create a photo-based inspiration entry, and the form displays a friendly message if none is selected.
 
 ## Interactive layout
 
