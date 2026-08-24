@@ -1,6 +1,12 @@
-# 2007 Bowie Move Planner — Dimensions Build
+# 2007 Bowie Move Planner — Interactive Layout Build
 
-This build includes the move checklist, floorplan views, an easy-to-read room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+This build includes the move checklist, an interactive graph-paper floor planner, a clean floorplan reference, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+
+## Interactive layout
+
+Open **Layout → My layout** to use the floor-plan editor. Drag furniture from the inventory onto the plan, or tap an inventory item to add it. Placed pieces snap to the graph-paper grid and can be moved, rotated, removed, or reset to the starter arrangement.
+
+Furniture positions are saved in the current browser. They do not sync between people or devices in this build. The inspiration gallery continues to sync through Netlify Blobs.
 
 ## Upload to GitHub
 
