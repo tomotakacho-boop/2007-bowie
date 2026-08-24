@@ -1,10 +1,19 @@
-# 2007 Bowie Move Planner — Interactive Layout Build
+# 2007 Bowie Move Planner — Measured Furniture Build
 
-This build includes the move checklist, an interactive graph-paper floor planner, a clean floorplan reference, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+This build includes the move checklist, an inch-scaled graph-paper floor planner, a clean floorplan reference without dimension annotations, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
 
 ## Interactive layout
 
-Open **Layout → My layout** to use the floor-plan editor. Drag furniture from the inventory onto the plan, or tap an inventory item to add it. Placed pieces snap to the graph-paper grid and can be moved, rotated, removed, or reset to the starter arrangement.
+Open **Layout → My layout** to use the floor-plan editor. Drag furniture from the inventory onto the plan, or tap an inventory item to add it. Placed pieces are scaled from their measured length and width, snap every 6 inches, and can be moved, rotated, removed, or reset to the starter arrangement.
+
+The measured inventory currently contains:
+
+- TV console — 69 inches long × 18 inches wide
+- Coffee table — 39 inches long × 20 inches wide
+- Couch — 78 inches long × 39 inches wide
+- Kitchen table — 40-inch diameter, with a selectable 10-inch extender that changes it to a 50 × 40-inch oval
+
+The desk nook is shown as a dashed overlay at the kitchen/living boundary instead of as a separate room.
 
 Furniture positions are saved in the current browser. They do not sync between people or devices in this build. The inspiration gallery continues to sync through Netlify Blobs.
 
