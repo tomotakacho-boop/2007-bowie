@@ -327,6 +327,7 @@
           <div class="mh-planner-toolbar" aria-label="Furniture controls">
             <span class="mh-selection-label" id="mh-selection-label">Select a furniture piece to edit it</span>
             <button class="mh-secondary" id="mh-rotate-furniture" type="button" disabled>Rotate</button>
+            <button class="mh-secondary" id="mh-change-orientation" type="button" hidden>Change shelf orientation</button>
             <button class="mh-secondary" id="mh-extend-table" type="button" hidden>Extend table</button>
             <button class="mh-secondary" id="mh-remove-furniture" type="button" disabled>Remove</button>
             <button class="mh-secondary" id="mh-reset-layout" type="button">Reset layout</button>
@@ -485,6 +486,7 @@
   const plannerGrid = root.querySelector('#mh-floor-grid');
   const selectionLabel = root.querySelector('#mh-selection-label');
   const rotateFurnitureButton = root.querySelector('#mh-rotate-furniture');
+  const changeOrientationButton = root.querySelector('#mh-change-orientation');
   const extendTableButton = root.querySelector('#mh-extend-table');
   const removeFurnitureButton = root.querySelector('#mh-remove-furniture');
   const boardWidthInches = 373;
@@ -494,7 +496,27 @@
     tvconsole: { name: 'TV console', length: 69, width: 18, description: '69″ L × 18″ W' },
     coffee: { name: 'Coffee table', length: 39, width: 20, description: '39″ L × 20″ W' },
     couch: { name: 'Couch', length: 78, width: 39, description: '78″ L × 39″ W' },
-    kitchenTable: { name: 'Kitchen table', length: 40, width: 40, description: '40″ diameter · extends to 50″ × 40″', round: true, extendable: true }
+    kitchenTable: { name: 'Kitchen table', length: 40, width: 40, description: '40″ diameter · extends to 50″ × 40″', round: true, extendable: true },
+    kitchenChair: { name: 'Kitchen table chair', length: 18, width: 18, description: '18″ L × 18″ W · 4 chairs owned', quantity: 4 },
+    barCart: { name: 'Glass bar cart', length: 22, width: 8, description: '22″ L × 8″ W' },
+    marbleTable: { name: 'Small marble round table', length: 17.5, width: 17.5, description: '17.5″ diameter', round: true },
+    litterRobot: { name: 'Litter Robot', length: 22, width: 22, description: '22″ L × 22″ W' },
+    bookshelf: { name: 'Bookshelf', length: 30, width: 12, description: '30″ L × 12″ W' },
+    bed: { name: 'Bed', length: 62, width: 88, description: '62″ L × 88″ W' },
+    nightstand: { name: 'Nightstand', length: 15, width: 16, description: '15″ L × 16″ W' },
+    cubeShelf: {
+      name: '8-cube wooden shelf',
+      length: 38,
+      width: 15.5,
+      description: '15.5″ × 38″ × 30″ · 3 orientations',
+      footprints: [
+        { length: 38, width: 15.5, name: 'upright' },
+        { length: 30, width: 15.5, name: 'on its side' },
+        { length: 38, width: 30, name: 'laid flat' }
+      ]
+    },
+    outdoorChair: { name: 'Outdoor chair', length: 30, width: 40, description: '30″ L × 40″ W' },
+    storageBox: { name: 'Storage box', length: 25, width: 20, description: '25″ L × 20″ W' }
   };
   const defaultFurniture = [
     { id: 'starter-tv-console', type: 'tvconsole', x: 176, y: 236, rotated: true, extended: false },
@@ -515,6 +537,7 @@
         x: Math.max(0, Math.min(boardWidthInches, Number(item.x) || 0)),
         y: Math.max(0, Math.min(boardHeightInches, Number(item.y) || 0)),
         rotated: Boolean(item.rotated),
+        orientation: Math.max(0, Number.parseInt(item.orientation, 10) || 0),
         extended: Boolean(item.extended && furnitureCatalog[item.type].extendable)
       }));
     } catch {
@@ -529,8 +552,11 @@
 
   function furnitureDimensions(item) {
     const definition = furnitureCatalog[item.type];
-    const horizontalLength = definition.extendable && item.extended ? 50 : definition.length;
-    const horizontalWidth = definition.width;
+    const orientationCount = definition.footprints?.length || 1;
+    const orientationIndex = Math.min(orientationCount - 1, Math.max(0, item.orientation || 0));
+    const footprint = definition.footprints?.[orientationIndex];
+    const horizontalLength = definition.extendable && item.extended ? 50 : (footprint?.length || definition.length);
+    const horizontalWidth = footprint?.width || definition.width;
     return {
       width: item.rotated ? horizontalWidth : horizontalLength,
       height: item.rotated ? horizontalLength : horizontalWidth
@@ -552,6 +578,12 @@
     const definition = item ? furnitureCatalog[item.type] : null;
     rotateFurnitureButton.disabled = !item;
     removeFurnitureButton.disabled = !item;
+    changeOrientationButton.hidden = !definition?.footprints;
+    if (definition?.footprints) {
+      const currentIndex = Math.min(definition.footprints.length - 1, Math.max(0, item.orientation || 0));
+      const nextIndex = (currentIndex + 1) % definition.footprints.length;
+      changeOrientationButton.textContent = 'Set shelf ' + definition.footprints[nextIndex].name;
+    }
     extendTableButton.hidden = !definition?.extendable;
     extendTableButton.textContent = item?.extended ? 'Remove extender' : 'Add 10″ extender';
     selectionLabel.textContent = item ? definition.name + ' selected · ' + furnitureLabel(item) : 'Select a furniture piece to edit it';
@@ -574,7 +606,12 @@
   function furnitureLabel(item) {
     const definition = furnitureCatalog[item.type];
     if (definition.extendable && item.extended) return '50″ L × 40″ W';
-    if (definition.round) return '40″ diameter';
+    if (definition.round) return definition.length + '″ diameter';
+    if (definition.footprints) {
+      const orientationIndex = Math.min(definition.footprints.length - 1, Math.max(0, item.orientation || 0));
+      const footprint = definition.footprints[orientationIndex];
+      return footprint.length + '″ L × ' + footprint.width + '″ W · ' + footprint.name;
+    }
     return definition.length + '″ L × ' + definition.width + '″ W';
   }
 
@@ -652,8 +689,10 @@
     if (!definition) return;
     const boardRect = plannerGrid.getBoundingClientRect();
     const scale = pixelsPerInch();
-    const width = definition.length * scale;
-    const height = definition.width * scale;
+    const newItem = { type, rotated: false, extended: false, orientation: 0 };
+    const dimensions = furnitureDimensions(newItem);
+    const width = dimensions.width * scale;
+    const height = dimensions.height * scale;
     const desiredX = Number.isFinite(clientX) ? clientX - boardRect.left - width / 2 : boardRect.width / 2 - width / 2;
     const desiredY = Number.isFinite(clientY) ? clientY - boardRect.top - height / 2 : boardRect.height / 2 - height / 2;
     const xPixels = Math.max(0, Math.min(boardRect.width - width, Math.round((desiredX / scale) / snapInches) * snapInches * scale));
@@ -664,6 +703,7 @@
       x: xPixels / scale,
       y: yPixels / scale,
       rotated: false,
+      orientation: 0,
       extended: false
     };
     placedFurniture.push(item);
@@ -710,6 +750,14 @@
     const item = placedFurniture.find((entry) => entry.id === selectedFurnitureId);
     if (!item) return;
     item.rotated = !item.rotated;
+    renderFurniture();
+    saveFurnitureLayout();
+  });
+  changeOrientationButton.addEventListener('click', () => {
+    const item = placedFurniture.find((entry) => entry.id === selectedFurnitureId);
+    const definition = item ? furnitureCatalog[item.type] : null;
+    if (!item || !definition?.footprints) return;
+    item.orientation = ((item.orientation || 0) + 1) % definition.footprints.length;
     renderFurniture();
     saveFurnitureLayout();
   });

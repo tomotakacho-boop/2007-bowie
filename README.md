@@ -1,4 +1,4 @@
-# 2007 Bowie Move Planner — Editable Inspiration Build
+# 2007 Bowie Move Planner — Expanded Furniture Inventory Build
 
 This build includes the move checklist, an inch-scaled graph-paper floor planner traced directly from the clean 2007 Bowie blueprint, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
 
@@ -16,6 +16,18 @@ The measured inventory currently contains:
 - Coffee table — 39 inches long × 20 inches wide
 - Couch — 78 inches long × 39 inches wide
 - Kitchen table — 40-inch diameter, with a selectable 10-inch extender that changes it to a 50 × 40-inch oval
+- Kitchen table chairs — four chairs, each 18 × 18 inches
+- Glass bar cart — 22 × 8 inches
+- Small marble round table — 17.5-inch diameter
+- Litter Robot — 22 × 22 inches
+- Bookshelf — 30 × 12 inches
+- Bed — 62 × 88 inches
+- Nightstand — 15 × 16 inches
+- 8-cube wooden shelf — 15.5 × 38 × 30 inches
+- Outdoor chair — 30 × 40 inches
+- Storage box — 25 × 20 inches
+
+The 8-cube shelf has three true-to-scale top-down footprints: upright (38 × 15.5), on its side (30 × 15.5), and laid flat (38 × 30). Select it on the plan and use **Set shelf…** to cycle through those orientations; **Rotate** still turns the current footprint 90 degrees.
 
 The desk nook is shown in its actual built-in position at the kitchen/living boundary instead of as a separate room.
 
