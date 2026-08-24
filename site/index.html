@@ -157,24 +157,16 @@
     position: relative;
     width: 100%;
     max-width: 760px;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1136 / 1382;
     overflow: hidden;
     border: 2px solid var(--mh-ink);
     border-radius: 16px;
-    background-color: var(--mh-surface);
-    background-image: linear-gradient(var(--mh-line) 1px, transparent 1px), linear-gradient(90deg, var(--mh-line) 1px, transparent 1px);
-    background-size: 12px 12px;
+    background-color: #f6f5f1;
     touch-action: none;
     user-select: none;
   }
-  #move-home .mh-room-zone { position: absolute; display: grid; place-items: center; padding: 6px; border: 3px solid var(--mh-ink); background: color-mix(in srgb, var(--mh-surface) 88%, var(--mh-green-soft)); color: var(--mh-muted); font-size: clamp(9px, 1.4vw, 13px); font-weight: 750; letter-spacing: .04em; text-align: center; text-transform: uppercase; }
-  #move-home .mh-room-wic { left: 3%; top: 3%; width: 37%; height: 18%; }
-  #move-home .mh-room-bath { left: 3%; top: 21%; width: 37%; height: 23%; }
-  #move-home .mh-room-bedroom { left: 3%; top: 44%; width: 43%; height: 35%; }
-  #move-home .mh-room-kitchen { left: 50%; top: 3%; width: 47%; height: 33%; }
-  #move-home .mh-room-living { left: 46%; top: 36%; width: 51%; height: 43%; }
-  #move-home .mh-room-terrace { left: 3%; top: 79%; width: 94%; height: 18%; background: color-mix(in srgb, var(--mh-surface) 82%, var(--mh-amber-soft)); }
-  #move-home .mh-desk-overlay { position: absolute; z-index: 2; left: 43%; top: 29%; width: 11%; height: 16%; display: grid; place-items: center; border: 2px dashed var(--mh-amber); border-radius: 8px; background: color-mix(in srgb, var(--mh-amber-soft) 72%, transparent); color: var(--mh-ink); font-size: 9px; font-weight: 800; letter-spacing: .05em; text-align: center; text-transform: uppercase; }
+  #move-home .mh-floor-grid::after { content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(47, 90, 70, .18) 1px, transparent 1px), linear-gradient(90deg, rgba(47, 90, 70, .18) 1px, transparent 1px); background-size: var(--mh-grid-step, 12px) var(--mh-grid-step, 12px); }
+  #move-home .mh-floor-trace { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; pointer-events: none; user-select: none; }
   #move-home .mh-furniture { position: absolute; z-index: 4; display: grid; place-items: center; overflow: hidden; border: 2px solid var(--mh-green); border-radius: 7px; background: var(--mh-green-soft); color: var(--mh-ink); padding: 2px; box-shadow: 0 3px 10px var(--mh-shadow); font-size: clamp(7px, 1.15vw, 10px); font-weight: 750; line-height: 1.05; text-align: center; touch-action: none; }
   #move-home .mh-furniture.is-selected { outline: 3px solid var(--mh-amber); outline-offset: 2px; z-index: 5; }
   #move-home .mh-inventory { position: sticky; top: 12px; }
@@ -333,15 +325,9 @@
             <button class="mh-secondary" id="mh-reset-layout" type="button">Reset layout</button>
           </div>
           <div class="mh-floor-grid" id="mh-floor-grid" tabindex="0" aria-label="Interactive floor plan. Drag furniture to move it on the grid.">
-            <div class="mh-room-zone mh-room-wic">Walk-in closet</div>
-            <div class="mh-room-zone mh-room-bath">Bathroom</div>
-            <div class="mh-room-zone mh-room-bedroom">Bedroom</div>
-            <div class="mh-room-zone mh-room-kitchen">Kitchen</div>
-            <div class="mh-room-zone mh-room-living">Living / Dining</div>
-            <div class="mh-desk-overlay">Desk<br>nook</div>
-            <div class="mh-room-zone mh-room-terrace">Terrace</div>
+            <img class="mh-floor-trace" src="assets/2007-bowie-clean-floorplan.png" alt="" aria-hidden="true">
           </div>
-          <p class="mh-footer-note">Furniture is scaled in inches, snaps every 6 inches, and saves in this browser automatically.</p>
+          <p class="mh-footer-note">The original blueprint is locked beneath the grid so walls, doors, fixtures, counters, and the terrace outline stay visible. Furniture is scaled in inches and snaps every 6 inches.</p>
         </div>
         <div>
           <aside class="mh-surface mh-inventory">
@@ -487,14 +473,14 @@
     });
   });
 
-  const plannerStorageKey = 'bowie-floor-planner-v2-exact-inches';
+  const plannerStorageKey = 'bowie-floor-planner-v3-blueprint-trace';
   const plannerGrid = root.querySelector('#mh-floor-grid');
   const selectionLabel = root.querySelector('#mh-selection-label');
   const rotateFurnitureButton = root.querySelector('#mh-rotate-furniture');
   const extendTableButton = root.querySelector('#mh-extend-table');
   const removeFurnitureButton = root.querySelector('#mh-remove-furniture');
-  const boardWidthInches = 370;
-  const boardHeightInches = 462.5;
+  const boardWidthInches = 373;
+  const boardHeightInches = boardWidthInches * 1382 / 1136;
   const snapInches = 6;
   const furnitureCatalog = {
     tvconsole: { name: 'TV console', length: 69, width: 18, description: '69″ L × 18″ W' },
@@ -600,7 +586,7 @@
     const scale = pixelsPerInch();
     if (scale) {
       const graphStep = Math.max(5, snapInches * scale);
-      plannerGrid.style.backgroundSize = graphStep + 'px ' + graphStep + 'px';
+      plannerGrid.style.setProperty('--mh-grid-step', graphStep + 'px');
     }
     plannerGrid.querySelectorAll('.mh-furniture').forEach((element) => element.remove());
     placedFurniture.forEach((item) => {
@@ -706,7 +692,7 @@
     addFurniture(event.dataTransfer.getData('text/furniture-type'), event.clientX, event.clientY);
   });
   plannerGrid.addEventListener('pointerdown', (event) => {
-    if (event.target === plannerGrid || event.target.classList.contains('mh-room-zone') || event.target.classList.contains('mh-desk-overlay')) {
+    if (event.target === plannerGrid) {
       selectedFurnitureId = '';
       updateFurnitureControls();
     }

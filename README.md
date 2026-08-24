@@ -1,6 +1,6 @@
-# 2007 Bowie Move Planner — Measured Furniture Build
+# 2007 Bowie Move Planner — Blueprint-Accurate Build
 
-This build includes the move checklist, an inch-scaled graph-paper floor planner, a clean floorplan reference without dimension annotations, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+This build includes the move checklist, an inch-scaled graph-paper floor planner traced directly from the clean 2007 Bowie blueprint, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
 
 ## Interactive layout
 
@@ -13,7 +13,9 @@ The measured inventory currently contains:
 - Couch — 78 inches long × 39 inches wide
 - Kitchen table — 40-inch diameter, with a selectable 10-inch extender that changes it to a 50 × 40-inch oval
 
-The desk nook is shown as a dashed overlay at the kitchen/living boundary instead of as a separate room.
+The desk nook is shown in its actual built-in position at the kitchen/living boundary instead of as a separate room.
+
+The blueprint is now the locked base layer of the interactive editor. This preserves the original wall locations and thicknesses, terrace recess, doors, closet shelving and shoe storage, bathroom fixtures, kitchen counters, entry door, WH/HP closet, washer/dryer closet, desk nook, and terrace door. Furniture remains interactive above the blueprint and graph grid.
 
 Furniture positions are saved in the current browser. They do not sync between people or devices in this build. The inspiration gallery continues to sync through Netlify Blobs.
 
