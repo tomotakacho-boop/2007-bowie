@@ -153,6 +153,10 @@
   #move-home .mh-planner-stage { min-width: 0; }
   #move-home .mh-planner-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   #move-home .mh-selection-label { flex: 1 1 170px; color: var(--mh-muted); font-size: 12px; }
+  #move-home .mh-save-status { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; border: 1px solid var(--mh-line); border-radius: 999px; background: var(--mh-surface); color: var(--mh-muted); padding: 5px 9px; font-size: 10px; white-space: nowrap; }
+  #move-home .mh-save-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--mh-green); }
+  #move-home .mh-save-status[data-state="saving"]::before { background: var(--mh-amber); }
+  #move-home .mh-save-status[data-state="error"]::before { background: #b65b4b; }
   #move-home .mh-floor-grid {
     position: relative;
     width: 100%;
@@ -216,6 +220,29 @@
   #move-home .mh-form-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
   #move-home .mh-upload-status { color: var(--mh-muted); font-size: 12px; }
   #move-home .mh-empty { padding: 26px; text-align: center; color: var(--mh-muted); background: var(--mh-surface); border: 1px dashed var(--mh-line); border-radius: 14px; }
+  #move-home .mh-guide-banner { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--mh-amber) 45%, var(--mh-line)); border-radius: 16px; background: var(--mh-amber-soft); }
+  #move-home .mh-guide-banner strong { display: block; margin-bottom: 4px; font-size: 15px; }
+  #move-home .mh-guide-banner p { margin: 0; color: var(--mh-muted); font-size: 12px; line-height: 1.5; }
+  #move-home .mh-guide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  #move-home .mh-guide-wide { grid-column: span 7; }
+  #move-home .mh-guide-narrow { grid-column: span 5; }
+  #move-home .mh-guide-full { grid-column: 1 / -1; }
+  #move-home .mh-guide-card h3 { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #move-home .mh-guide-kicker { margin: 5px 0 2px; color: var(--mh-muted); font-size: 11px; line-height: 1.45; }
+  #move-home .mh-guide-list { list-style: none; margin: 8px 0 0; padding: 0; }
+  #move-home .mh-guide-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-top: 1px solid var(--mh-line); }
+  #move-home .mh-guide-item:first-child { border-top: 0; }
+  #move-home .mh-guide-item input { flex: 0 0 auto; margin-top: 3px; accent-color: var(--mh-green); }
+  #move-home .mh-guide-item label { font-size: 13px; line-height: 1.4; }
+  #move-home .mh-guide-item label span { display: block; margin-top: 3px; color: var(--mh-muted); font-size: 10px; }
+  #move-home .mh-guide-item input:checked + label { color: var(--mh-muted); text-decoration: line-through; }
+  #move-home .mh-do-not-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+  #move-home .mh-guide-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+  #move-home .mh-guide-fact { padding: 12px; border-radius: 12px; background: var(--mh-surface-2); }
+  #move-home .mh-guide-fact strong { display: block; margin-bottom: 4px; font-size: 12px; }
+  #move-home .mh-guide-fact p { margin: 0; color: var(--mh-muted); font-size: 11px; line-height: 1.45; }
+  #move-home .mh-guide-source { color: var(--mh-muted); font-size: 11px; }
+  #move-home .mh-guide-source a { color: var(--mh-green); }
   #move-home .mh-footer-note { margin: 17px 0 0; color: var(--mh-muted); font-size: 11px; }
   @media (max-width: 720px) {
     #move-home .mh-topbar { flex-direction: column; padding: 21px 19px 17px; }
@@ -226,11 +253,13 @@
     #move-home .mh-planner-shell { grid-template-columns: 1fr; }
     #move-home .mh-inventory { position: static; }
     #move-home .mh-inspo-grid { grid-template-columns: 1fr 1fr; }
+    #move-home .mh-guide-wide, #move-home .mh-guide-narrow { grid-column: 1 / -1; }
     #move-home .mh-form-grid { grid-template-columns: 1fr; }
     #move-home .mh-field-full { grid-column: auto; }
   }
   @media (max-width: 460px) {
-    #move-home .mh-statrow, #move-home .mh-inspo-grid { grid-template-columns: 1fr; }
+    #move-home .mh-statrow, #move-home .mh-inspo-grid, #move-home .mh-do-not-grid, #move-home .mh-guide-facts { grid-template-columns: 1fr; }
+    #move-home .mh-guide-banner { flex-direction: column; }
     #move-home .mh-section-head { align-items: flex-start; flex-direction: column; }
     #move-home .mh-planner-toolbar .mh-secondary { padding: 7px 9px; font-size: 12px; }
   }
@@ -253,6 +282,7 @@
 
   <nav class="mh-nav" aria-label="Move planner sections">
     <button class="mh-tab" type="button" data-panel="overview" aria-selected="true">Overview</button>
+    <button class="mh-tab" type="button" data-panel="mover-guide" aria-selected="false">Mover guide</button>
     <button class="mh-tab" type="button" data-panel="checklist" aria-selected="false">Checklist</button>
     <button class="mh-tab" type="button" data-panel="layout" aria-selected="false">Layout</button>
     <button class="mh-tab" type="button" data-panel="inspiration" aria-selected="false">Inspiration</button>
@@ -262,7 +292,7 @@
     <section class="mh-panel" data-view="overview">
       <div class="mh-section-head">
         <div><h2>This week</h2><div class="mh-small">Your moving plan at a glance</div></div>
-        <span class="mh-chip">4 days to go</span>
+        <span class="mh-chip">Move tomorrow</span>
       </div>
       <div class="mh-grid">
         <article class="mh-surface mh-progress-card">
@@ -285,6 +315,105 @@
           </ul>
         </article>
       </div>
+    </section>
+
+    <section class="mh-panel" id="mh-mover-guide" data-view="mover-guide" hidden>
+      <div class="mh-section-head">
+        <div><h2>Tomorrow’s mover guide</h2><div class="mh-small">Ace Relocation’s rules, condensed for August 27</div></div>
+        <span class="mh-chip" id="mh-guide-status">0 items handled</span>
+      </div>
+
+      <div class="mh-guide-banner">
+        <div>
+          <strong>Movers typically arrive between 8:00–10:00 a.m.</strong>
+          <p>Be available throughout packing and loading. If you cannot be present, designate someone who can supervise and sign the paperwork. Avoid same-day travel.</p>
+        </div>
+        <span class="mh-chip">Move day · Aug 27</span>
+      </div>
+
+      <div class="mh-guide-grid">
+        <article class="mh-surface mh-guide-card mh-guide-wide">
+          <h3>Do tonight <span class="mh-chip">Priority</span></h3>
+          <p class="mh-guide-kicker">Check these off as you finish. Your progress stays saved in this browser.</p>
+          <ul class="mh-guide-list">
+            <li class="mh-guide-item"><input id="guide-tonight-1" type="checkbox"><label for="guide-tonight-1">Create a clearly marked “do not load” area for everything traveling with you.<span>Include valuables, documents, medicine, computers, sentimental items, hotel supplies, and keys.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-2" type="checkbox"><label for="guide-tonight-2">Do not pre-pack household goods the authorized crew is packing.<span>Ace says customer-packed cartons may not be covered if damaged.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-3" type="checkbox"><label for="guide-tonight-3">Remove prohibited items from the apartment or separate them from the shipment.<span>Use the “Cannot go on the truck” list below.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-4" type="checkbox"><label for="guide-tonight-4">Confirm the elevator/loading reservation and any building rules.</label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-5" type="checkbox"><label for="guide-tonight-5">Take down permanent fixtures the mover is not handling.<span>Window treatments, shelf systems, wall-mounted TVs, and brackets.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-6" type="checkbox"><label for="guide-tonight-6">Disconnect electronics and remove all media.<span>Remove printer, fax, and copier ink cartridges too.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-7" type="checkbox"><label for="guide-tonight-7">Handle furniture or equipment you are responsible for disassembling.<span>Particleboard/presswood furniture and exercise equipment may require advance disassembly.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-8" type="checkbox"><label for="guide-tonight-8">List every item worth $3,000+ on the high-value form.<span>Include the value and flag anything requiring special care.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-tonight-9" type="checkbox"><label for="guide-tonight-9">Pack everything needed during the hotel/delivery window separately.<span>Goods placed in storage cannot be accessed until delivery.</span></label></li>
+          </ul>
+        </article>
+
+        <article class="mh-surface mh-guide-card mh-guide-narrow">
+          <h3>Move-day checks</h3>
+          <p class="mh-guide-kicker">Do these before the crew leaves your old apartment.</p>
+          <ul class="mh-guide-list">
+            <li class="mh-guide-item"><input id="guide-day-1" type="checkbox"><label for="guide-day-1">Review every condition notation on the inventory before signing.<span>Add exceptions or disagreements before you sign.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-day-2" type="checkbox"><label for="guide-day-2">Do a final walk-through for anything left behind.<span>Check every closet, drawer, kitchen cabinet, bathroom cabinet, and terrace area.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-day-3" type="checkbox"><label for="guide-day-3">Inspect the apartment for property damage before the van operator leaves.</label></li>
+            <li class="mh-guide-item"><input id="guide-day-4" type="checkbox"><label for="guide-day-4">Write any property damage on the mover’s paperwork and get both signatures.<span>Take photos and report it to the coordinator within 24 hours.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-day-5" type="checkbox"><label for="guide-day-5">Keep copies/photos of the signed inventory and moving paperwork.</label></li>
+            <li class="mh-guide-item"><input id="guide-day-6" type="checkbox"><label for="guide-day-6">Confirm the written delivery spread and how the driver will contact you.</label></li>
+          </ul>
+        </article>
+
+        <article class="mh-surface mh-guide-card mh-guide-full">
+          <h3>Cannot go on the truck</h3>
+          <p class="mh-guide-kicker">Set these aside, dispose of them safely, or ask the Move Coordinator if the item is questionable.</p>
+          <div class="mh-do-not-grid">
+            <ul class="mh-guide-list">
+              <li class="mh-guide-item"><input id="guide-no-1" type="checkbox"><label for="guide-no-1">Aerosol products</label></li>
+              <li class="mh-guide-item"><input id="guide-no-2" type="checkbox"><label for="guide-no-2">Alcohol, beer, liquor, and wine<span>Open containers will not be taken; large collections may require a third party.</span></label></li>
+              <li class="mh-guide-item"><input id="guide-no-3" type="checkbox"><label for="guide-no-3">Ammunition</label></li>
+              <li class="mh-guide-item"><input id="guide-no-4" type="checkbox"><label for="guide-no-4">Building materials, wood, and firewood</label></li>
+              <li class="mh-guide-item"><input id="guide-no-5" type="checkbox"><label for="guide-no-5">Cleaning products</label></li>
+              <li class="mh-guide-item"><input id="guide-no-6" type="checkbox"><label for="guide-no-6">Combustible, corrosive, explosive, or flammable products<span>Includes oil, gas, kerosene and containers, paint, perfume/cologne, and fireworks.</span></label></li>
+              <li class="mh-guide-item"><input id="guide-no-7" type="checkbox"><label for="guide-no-7">Jewelry, gems, watches, and similar valuables</label></li>
+              <li class="mh-guide-item"><input id="guide-no-8" type="checkbox"><label for="guide-no-8">Liquids of any kind and open toiletries</label></li>
+            </ul>
+            <ul class="mh-guide-list">
+              <li class="mh-guide-item"><input id="guide-no-9" type="checkbox"><label for="guide-no-9">Lithium batteries</label></li>
+              <li class="mh-guide-item"><input id="guide-no-10" type="checkbox"><label for="guide-no-10">Live plants</label></li>
+              <li class="mh-guide-item"><input id="guide-no-11" type="checkbox"><label for="guide-no-11">Money, cash, checkbooks, and coin collections</label></li>
+              <li class="mh-guide-item"><input id="guide-no-12" type="checkbox"><label for="guide-no-12">Perishable and frozen food</label></li>
+              <li class="mh-guide-item"><input id="guide-no-13" type="checkbox"><label for="guide-no-13">Prescription medication</label></li>
+              <li class="mh-guide-item"><input id="guide-no-14" type="checkbox"><label for="guide-no-14">Pets</label></li>
+              <li class="mh-guide-item"><input id="guide-no-15" type="checkbox"><label for="guide-no-15">Pressurized tanks, including empty tanks</label></li>
+              <li class="mh-guide-item"><input id="guide-no-16" type="checkbox"><label for="guide-no-16">Sensitive documents and computer/digital programs<span>Financial and tax records, deeds, wills, passports, and personal documents.</span></label></li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="mh-surface mh-guide-card mh-guide-narrow">
+          <h3>Carry yourself</h3>
+          <p class="mh-guide-kicker">Ace recommends keeping these off the truck even when they are not strictly prohibited.</p>
+          <ul class="mh-guide-list">
+            <li class="mh-guide-item"><input id="guide-carry-1" type="checkbox"><label for="guide-carry-1">Candles</label></li>
+            <li class="mh-guide-item"><input id="guide-carry-2" type="checkbox"><label for="guide-carry-2">Collections of value<span>Sports cards, comics, stamps, handbags, designer purses, tennis shoes; original boxes/packaging are not damage-covered.</span></label></li>
+            <li class="mh-guide-item"><input id="guide-carry-3" type="checkbox"><label for="guide-carry-3">Family photos and sentimental items</label></li>
+            <li class="mh-guide-item"><input id="guide-carry-4" type="checkbox"><label for="guide-carry-4">Laptop and desktop computers</label></li>
+            <li class="mh-guide-item"><input id="guide-carry-5" type="checkbox"><label for="guide-carry-5">Firearms<span>Ask the coordinator whether your employer allows transportation.</span></label></li>
+          </ul>
+        </article>
+
+        <article class="mh-surface mh-guide-card mh-guide-wide">
+          <h3>Delivery, storage, and claims</h3>
+          <div class="mh-guide-facts">
+            <div class="mh-guide-fact"><strong>Delivery spread</strong><p>Be available throughout it. If you cannot receive the shipment, the goods may go into storage at your expense unless arranged and authorized in advance.</p></div>
+            <div class="mh-guide-fact"><strong>Placement</strong><p>Movers place items in the room marked on each box. Extra rearranging may cost more. Ace recommends two adults for delivery.</p></div>
+            <div class="mh-guide-fact"><strong>Storage access</strong><p>You cannot access goods once they enter storage. Going beyond the authorized period may create monthly charges.</p></div>
+            <div class="mh-guide-fact"><strong>Self-storage claims</strong><p>Coverage ends when the shipment is delivered to self-storage. Record missing or damaged items before the van operator leaves.</p></div>
+            <div class="mh-guide-fact"><strong>Closing day</strong><p>Household goods cannot be delivered on the day of closing.</p></div>
+            <div class="mh-guide-fact"><strong>Unpacking service</strong><p>If authorized, movers unpack to flat surfaces and remove materials—not closets, cabinets, or shelves. It may be scheduled for another day.</p></div>
+          </div>
+        </article>
+      </div>
+
+      <p class="mh-footer-note mh-guide-source">Source: <a href="https://kb.acerelocation.com/important-information-for-your-move" target="_blank" rel="noopener noreferrer">Ace Relocation Systems — Important Information For Your Move</a>, accessed August 26, 2026. Ace notes that its lists are examples; ask your Move Coordinator or driver about uncertain items.</p>
     </section>
 
     <section class="mh-panel" data-view="checklist" hidden>
@@ -331,11 +460,12 @@
             <button class="mh-secondary" id="mh-extend-table" type="button" hidden>Extend table</button>
             <button class="mh-secondary" id="mh-remove-furniture" type="button" disabled>Remove</button>
             <button class="mh-secondary" id="mh-reset-layout" type="button">Reset layout</button>
+            <span class="mh-save-status" id="mh-layout-save-status" data-state="saving" role="status" aria-live="polite">Connecting shared autosave…</span>
           </div>
           <div class="mh-floor-grid" id="mh-floor-grid" tabindex="0" aria-label="Interactive floor plan. Drag furniture to move it on the grid.">
             <img class="mh-floor-trace" src="assets/2007-bowie-clean-floorplan.png" alt="" aria-hidden="true">
           </div>
-          <p class="mh-footer-note">The original blueprint is locked beneath the grid so walls, doors, fixtures, counters, and the terrace outline stay visible. Furniture is scaled in inches and snaps every 6 inches.</p>
+          <p class="mh-footer-note">The original blueprint is locked beneath the grid so walls, doors, fixtures, counters, and the terrace outline stay visible. Furniture is scaled in inches, snaps every 6 inches, and autosaves to the shared layout after every change.</p>
         </div>
         <div>
           <aside class="mh-surface mh-inventory">
@@ -489,6 +619,7 @@
   const changeOrientationButton = root.querySelector('#mh-change-orientation');
   const extendTableButton = root.querySelector('#mh-extend-table');
   const removeFurnitureButton = root.querySelector('#mh-remove-furniture');
+  const layoutSaveStatus = root.querySelector('#mh-layout-save-status');
   const boardWidthInches = 373;
   const boardHeightInches = boardWidthInches * 1382 / 1136;
   const snapInches = 6;
@@ -526,28 +657,167 @@
   ];
   let placedFurniture = [];
   let selectedFurnitureId = '';
+  let sharedLayoutInitialized = false;
+  let sharedLayoutSaving = false;
+  let sharedLayoutSaveQueued = false;
+  let sharedLayoutSaveTimer = 0;
+  let sharedLayoutRetryTimer = 0;
+  let sharedLayoutInitializationTimer = 0;
+  let sharedLayoutRefreshInFlight = false;
+  let sharedLayoutHasLocalChanges = false;
+  let lastSharedLayoutUpdatedAt = '';
 
-  function readFurnitureLayout() {
+  function normalizeFurnitureLayout(value) {
+    if (!Array.isArray(value)) return null;
+    return value.slice(0, 200).filter((item) => furnitureCatalog[item?.type]).map((item) => ({
+      id: String(item.id || ('furniture-' + Date.now() + '-' + Math.random().toString(16).slice(2))),
+      type: item.type,
+      x: Math.max(0, Math.min(boardWidthInches, Number(item.x) || 0)),
+      y: Math.max(0, Math.min(boardHeightInches, Number(item.y) || 0)),
+      rotated: Boolean(item.rotated),
+      orientation: Math.max(0, Math.min(furnitureCatalog[item.type].footprints?.length - 1 || 0, Number.parseInt(item.orientation, 10) || 0)),
+      extended: Boolean(item.extended && furnitureCatalog[item.type].extendable)
+    }));
+  }
+
+  function readLocalFurnitureLayout() {
     try {
-      const value = JSON.parse(localStorage.getItem(plannerStorageKey) || 'null');
-      if (!Array.isArray(value)) return defaultFurniture.map((item) => ({ ...item }));
-      return value.filter((item) => furnitureCatalog[item.type]).map((item) => ({
-        id: String(item.id),
-        type: item.type,
-        x: Math.max(0, Math.min(boardWidthInches, Number(item.x) || 0)),
-        y: Math.max(0, Math.min(boardHeightInches, Number(item.y) || 0)),
-        rotated: Boolean(item.rotated),
-        orientation: Math.max(0, Number.parseInt(item.orientation, 10) || 0),
-        extended: Boolean(item.extended && furnitureCatalog[item.type].extendable)
-      }));
+      const raw = localStorage.getItem(plannerStorageKey);
+      return raw === null ? null : normalizeFurnitureLayout(JSON.parse(raw));
     } catch {
-      return defaultFurniture.map((item) => ({ ...item }));
+      return null;
     }
   }
 
-  function saveFurnitureLayout() {
-    try { localStorage.setItem(plannerStorageKey, JSON.stringify(placedFurniture)); }
-    catch { /* The editor remains usable when browser storage is unavailable. */ }
+  function saveFurnitureLocally(items = placedFurniture) {
+    try { localStorage.setItem(plannerStorageKey, JSON.stringify(items)); }
+    catch { /* Shared storage remains available when browser storage is unavailable. */ }
+  }
+
+  function setLayoutSaveStatus(message, state = 'saved') {
+    layoutSaveStatus.textContent = message;
+    layoutSaveStatus.dataset.state = state;
+  }
+
+  function sharedLayoutPayload() {
+    return placedFurniture.map((item) => ({
+      id: item.id,
+      type: item.type,
+      x: item.x,
+      y: item.y,
+      rotated: Boolean(item.rotated),
+      orientation: item.orientation || 0,
+      extended: Boolean(item.extended)
+    }));
+  }
+
+  async function saveSharedFurnitureLayout() {
+    if (!sharedLayoutInitialized) return;
+    if (sharedLayoutSaving) {
+      sharedLayoutSaveQueued = true;
+      return;
+    }
+    sharedLayoutSaving = true;
+    sharedLayoutSaveQueued = false;
+    clearTimeout(sharedLayoutRetryTimer);
+    sharedLayoutRetryTimer = 0;
+    const items = sharedLayoutPayload();
+    const savedSnapshot = JSON.stringify(items);
+    setLayoutSaveStatus('Saving shared layout…', 'saving');
+    try {
+      const response = await fetch('/.netlify/functions/layout', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'The shared layout could not be saved.');
+      lastSharedLayoutUpdatedAt = payload.layout?.updatedAt || '';
+      if (JSON.stringify(sharedLayoutPayload()) === savedSnapshot) sharedLayoutHasLocalChanges = false;
+      setLayoutSaveStatus('Shared layout saved');
+    } catch {
+      setLayoutSaveStatus('Shared save will retry', 'error');
+      sharedLayoutSaveQueued = true;
+      sharedLayoutRetryTimer = window.setTimeout(() => {
+        sharedLayoutRetryTimer = 0;
+        sharedLayoutSaveQueued = false;
+        saveSharedFurnitureLayout();
+      }, 5000);
+    } finally {
+      sharedLayoutSaving = false;
+      if (sharedLayoutSaveQueued && !sharedLayoutRetryTimer) {
+        sharedLayoutSaveQueued = false;
+        saveSharedFurnitureLayout();
+      }
+    }
+  }
+
+  function saveFurnitureLayout(immediate = true) {
+    saveFurnitureLocally();
+    sharedLayoutHasLocalChanges = true;
+    if (!sharedLayoutInitialized) return;
+    clearTimeout(sharedLayoutSaveTimer);
+    sharedLayoutSaveTimer = 0;
+    if (immediate) saveSharedFurnitureLayout();
+    else sharedLayoutSaveTimer = window.setTimeout(() => {
+      sharedLayoutSaveTimer = 0;
+      saveSharedFurnitureLayout();
+    }, 450);
+  }
+
+  async function initializeSharedFurnitureLayout() {
+    clearTimeout(sharedLayoutInitializationTimer);
+    const localLayout = readLocalFurnitureLayout();
+    setLayoutSaveStatus('Connecting shared autosave…', 'saving');
+    try {
+      const response = await fetch('/.netlify/functions/layout', { headers: { accept: 'application/json' } });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'The shared layout could not be loaded.');
+      const remoteItems = payload.layout && Array.isArray(payload.layout.items)
+        ? normalizeFurnitureLayout(payload.layout.items)
+        : null;
+      sharedLayoutInitialized = true;
+      if (remoteItems && !sharedLayoutHasLocalChanges) {
+        placedFurniture = remoteItems;
+        selectedFurnitureId = '';
+        lastSharedLayoutUpdatedAt = payload.layout.updatedAt || '';
+        saveFurnitureLocally();
+        renderFurniture();
+        setLayoutSaveStatus('Shared layout loaded');
+      } else if (localLayout || sharedLayoutHasLocalChanges) {
+        placedFurniture = readLocalFurnitureLayout() || localLayout || placedFurniture;
+        renderFurniture();
+        await saveSharedFurnitureLayout();
+      } else {
+        setLayoutSaveStatus('Shared autosave ready');
+      }
+    } catch {
+      sharedLayoutInitialized = false;
+      setLayoutSaveStatus('Using local copy · reconnecting', 'error');
+      sharedLayoutInitializationTimer = window.setTimeout(initializeSharedFurnitureLayout, 5000);
+    }
+  }
+
+  async function refreshSharedFurnitureLayout() {
+    if (!sharedLayoutInitialized || sharedLayoutSaving || sharedLayoutSaveTimer || sharedLayoutRetryTimer || sharedLayoutSaveQueued || sharedLayoutHasLocalChanges || sharedLayoutRefreshInFlight) return;
+    sharedLayoutRefreshInFlight = true;
+    try {
+      const response = await fetch('/.netlify/functions/layout', { headers: { accept: 'application/json' } });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.layout || payload.layout.updatedAt === lastSharedLayoutUpdatedAt) return;
+      const remoteItems = normalizeFurnitureLayout(payload.layout.items);
+      if (!remoteItems) return;
+      placedFurniture = remoteItems;
+      selectedFurnitureId = '';
+      lastSharedLayoutUpdatedAt = payload.layout.updatedAt || '';
+      saveFurnitureLocally();
+      renderFurniture();
+      setLayoutSaveStatus('Latest shared layout loaded');
+    } catch {
+      setLayoutSaveStatus('Could not check shared layout', 'error');
+    } finally {
+      sharedLayoutRefreshInFlight = false;
+    }
   }
 
   function furnitureDimensions(item) {
@@ -668,12 +938,13 @@
           item.x = xPixels / scale;
           item.y = yPixels / scale;
           positionFurniture(element, item);
+          saveFurnitureLayout(false);
         };
         const stop = () => {
           element.removeEventListener('pointermove', move);
           element.removeEventListener('pointerup', stop);
           element.removeEventListener('pointercancel', stop);
-          saveFurnitureLayout();
+          saveFurnitureLayout(true);
         };
         element.addEventListener('pointermove', move);
         element.addEventListener('pointerup', stop);
@@ -799,8 +1070,11 @@
     saveFurnitureLayout();
   });
   window.addEventListener('resize', renderFurniture);
-  placedFurniture = readFurnitureLayout();
+  window.addEventListener('focus', refreshSharedFurnitureLayout);
+  const locallySavedFurniture = readLocalFurnitureLayout();
+  placedFurniture = locallySavedFurniture || defaultFurniture.map((item) => ({ ...item }));
   renderFurniture();
+  initializeSharedFurnitureLayout();
 
   const storageKey = 'bowie-move-planner-v1';
 
@@ -978,7 +1252,8 @@
       title: item.querySelector('label').childNodes[0].textContent,
       meta: item.querySelector('span').textContent
     }));
-    try { localStorage.setItem(storageKey, JSON.stringify({ tasks })); }
+    const guide = Object.fromEntries([...root.querySelectorAll('#mh-mover-guide input[type="checkbox"]')].map((input) => [input.id, input.checked]));
+    try { localStorage.setItem(storageKey, JSON.stringify({ tasks, guide })); }
     catch { /* The preview still works when private browsing blocks storage. */ }
   }
 
@@ -989,6 +1264,16 @@
     root.querySelectorAll('#mh-full-list input[type="checkbox"]').forEach((input) => {
       if (states.has(input.id)) input.checked = states.get(input.id);
     });
+    const guideStates = saved.guide || {};
+    root.querySelectorAll('#mh-mover-guide input[type="checkbox"]').forEach((input) => {
+      if (Object.prototype.hasOwnProperty.call(guideStates, input.id)) input.checked = Boolean(guideStates[input.id]);
+    });
+  }
+
+  function updateGuideProgress() {
+    const items = [...root.querySelectorAll('#mh-mover-guide input[type="checkbox"]')];
+    const complete = items.filter((input) => input.checked).length;
+    root.querySelector('#mh-guide-status').textContent = complete + ' of ' + items.length + ' handled';
   }
 
   function updateProgress() {
@@ -1001,6 +1286,11 @@
     root.querySelector('#mh-progress-text').textContent = percentage + '% complete';
   }
   root.querySelector('#mh-full-list').addEventListener('change', () => { updateProgress(); saveState(); });
+  root.querySelector('#mh-mover-guide').addEventListener('change', (event) => {
+    if (!event.target.matches('input[type="checkbox"]')) return;
+    updateGuideProgress();
+    saveState();
+  });
 
   root.querySelector('#mh-add-task').addEventListener('click', () => {
     const input = root.querySelector('#mh-new-task');
@@ -1172,6 +1462,7 @@
 
   restoreState();
   updateProgress();
+  updateGuideProgress();
   renderRoomFilters();
   loadInspiration();
 })();

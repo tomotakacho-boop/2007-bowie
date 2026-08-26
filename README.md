@@ -1,6 +1,17 @@
-# 2007 Bowie Move Planner — Expanded Furniture Inventory Build
+# 2007 Bowie Move Planner — Move-Day Guide Build
 
 This build includes the move checklist, an inch-scaled graph-paper floor planner traced directly from the clean 2007 Bowie blueprint, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
+
+## Mover guide
+
+The new **Mover guide** tab condenses Ace Relocation Systems’ move instructions into four easy-access sections:
+
+- Tasks to finish the night before and on move day
+- Household goods that cannot go on the truck
+- Valuable and sentimental items Ace recommends carrying yourself
+- Delivery, storage, unpacking, and claims reminders
+
+Every actionable item has a checkbox, and the checked state is retained in the current browser. The page visibly cites and links to [Ace Relocation Systems — Important Information For Your Move](https://kb.acerelocation.com/important-information-for-your-move), accessed August 26, 2026.
 
 The inspiration form is now compact and has no HTML required markers. Idea titles and links are optional. Source and product fields accept either full URLs or plain domains such as `thecontainerstore.com`; common placeholders such as `n/a` are treated as blank. A photo is still needed to create a photo-based inspiration entry, and the form displays a friendly message if none is selected.
 
@@ -33,7 +44,11 @@ The desk nook is shown in its actual built-in position at the kitchen/living bou
 
 The blueprint is now the locked base layer of the interactive editor. This preserves the original wall locations and thicknesses, terrace recess, doors, closet shelving and shoe storage, bathroom fixtures, kitchen counters, entry door, WH/HP closet, washer/dryer closet, desk nook, and terrace door. Furniture remains interactive above the blueprint and graph grid.
 
-Furniture positions are saved in the current browser. They do not sync between people or devices in this build. The inspiration gallery continues to sync through Netlify Blobs.
+Furniture positions now autosave to Netlify Blobs after every addition, move, rotation, orientation change, table extension, removal, or reset. Friends opening the same Netlify project see and edit the same shared layout. A local browser copy remains as a temporary fallback if the shared save is briefly unavailable.
+
+### Preserve the layout already on your computer
+
+After deploying this build, first open the live site using the same browser, device, and site address where you created the current layout. The page displays that existing local arrangement immediately. Because the shared layout is initially empty, it then migrates the exact saved arrangement to Netlify automatically. Open it yourself once before sending the updated site to friends.
 
 ## Upload to GitHub
 
@@ -61,10 +76,10 @@ Use **All rooms** to see room sections together, or choose one room to filter th
 
 ## Storage behavior
 
-Inspiration photos and their details are stored in Netlify Blobs, so they sync across devices. Adding and deleting ideas does not require a password or private key.
+Inspiration photos, inspiration details, and the interactive furniture layout are stored in Netlify Blobs, so they sync across devices. Adding, editing, deleting, or rearranging content does not require a password or private key.
 
-Friends who open the same live Netlify site can add photos, and those photos will appear for everyone visiting that site. A custom domain and the site's `netlify.app` address also share the gallery when both point to this same Netlify project. A separate copy deployed as a different Netlify project has its own separate gallery.
+Friends who open the same live Netlify site can add photos and rearrange furniture. Their saved changes become the shared version for everyone using that Netlify project. Returning to the tab also checks for a newer shared layout. A custom domain and the site's `netlify.app` address share the same server data when both point to this Netlify project. A separately deployed Netlify project has its own data.
 
 The checklist is stored in the current browser. Checklist progress will not automatically sync to another device.
 
-Because there is no authentication, anyone who discovers the public site address could add or delete inspiration items. This is intentional for this personal build.
+Because there is no authentication, anyone who discovers the public site address could change the layout or add, edit, and delete inspiration items. This is intentional for this personal build.
