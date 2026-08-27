@@ -53,6 +53,8 @@ Use the **Cloud layout** menu to switch between public plans. **New layout** cre
 
 Use **+ New** in the Furniture inventory to save custom furniture. Choose **Rectangle** to enter length and width, or **Circle** to enter a single diameter; circular furniture renders as a true circle on the plan. To adjust an existing inventory item, select one of its placed copies and choose **Edit dimensions**. The updated dimensions and shape apply to every copy of that item in the current layout and save to Netlify automatically.
 
+The furniture form uses a single compact column inside the inventory sidebar, so every control remains visible. Navigation tabs, inspiration-room filters, layout controls, and action buttons wrap onto additional lines when needed. The page itself is the only scroll container; no toolbar, filter row, form, or sidebar requires horizontal or nested scrolling.
+
 On the first request after deployment, the function automatically migrates the previous Netlify-saved shared arrangement into **Tomo's layout**. No special browser, device, manual copy, secret key, or environment variable is needed to preserve it.
 
 ## Upload to GitHub

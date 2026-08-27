@@ -6,7 +6,7 @@
 <meta name="description" content="Move checklist, floorplan, and room-by-room design inspiration for 2007 Bowie.">
 <title>2007 Bowie Move Planner</title>
 <style>
-  html, body { margin: 0; min-height: 100%; }
+  html, body { margin: 0; min-height: 100%; overflow-x: hidden; }
   #move-home {
     --mh-bg: light-dark(#f4f0e8, #171816);
     --mh-surface: light-dark(#fffdf8, #23251f);
@@ -25,10 +25,12 @@
     border: 1px solid var(--mh-line);
     border-radius: 24px;
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     box-shadow: 0 20px 50px var(--mh-shadow);
   }
-  #move-home * { box-sizing: border-box; }
+  #move-home * { box-sizing: border-box; min-width: 0; }
   #move-home button, #move-home input, #move-home select { font: inherit; }
   #move-home button { cursor: pointer; }
   #move-home .mh-topbar {
@@ -60,9 +62,9 @@
   #move-home .mh-datebox span { display: block; margin-top: 4px; color: var(--mh-muted); font-size: 12px; }
   #move-home .mh-nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     padding: 10px 20px;
-    overflow-x: auto;
     background: var(--mh-surface);
     border-bottom: 1px solid var(--mh-line);
   }
@@ -146,7 +148,7 @@
   #move-home .mh-dimension-table th:last-child { text-align: right; }
   #move-home .mh-dimension-table td { padding: 11px 0; border-top: 1px solid var(--mh-line); font-size: 13px; vertical-align: middle; }
   #move-home .mh-dimension-table td:first-child { padding-right: 12px; font-weight: 700; }
-  #move-home .mh-dimension-table td:last-child { color: var(--mh-green); font-weight: 750; text-align: right; white-space: nowrap; }
+  #move-home .mh-dimension-table td:last-child { color: var(--mh-green); font-weight: 750; text-align: right; overflow-wrap: anywhere; }
   #move-home .mh-approx { display: block; margin-top: 2px; color: var(--mh-muted); font-size: 10px; font-weight: 500; }
   #move-home .mh-dimension-note { margin: 12px 0 0; padding: 10px 11px; border-radius: 10px; background: var(--mh-green-soft); color: var(--mh-muted); font-size: 11px; line-height: 1.45; }
   #move-home .mh-planner-shell { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 18px; align-items: start; }
@@ -161,10 +163,12 @@
   #move-home .mh-inline-form .mh-field label { font-size: 10px; }
   #move-home .mh-inline-form .mh-input, #move-home .mh-inline-form .mh-select { min-height: 36px; padding: 7px 8px; }
   #move-home .mh-inline-form-note { margin: 0; color: var(--mh-muted); font-size: 10px; line-height: 1.4; }
+  #move-home #mh-layout-form .mh-inline-fields, #move-home #mh-furniture-form .mh-inline-fields { grid-template-columns: minmax(0, 1fr); }
+  #move-home #mh-layout-form .mh-field, #move-home #mh-furniture-form .mh-field { grid-column: auto; width: 100%; }
   #move-home .mh-planner-stage { min-width: 0; }
   #move-home .mh-planner-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   #move-home .mh-selection-label { flex: 1 1 170px; color: var(--mh-muted); font-size: 12px; }
-  #move-home .mh-save-status { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; border: 1px solid var(--mh-line); border-radius: 999px; background: var(--mh-surface); color: var(--mh-muted); padding: 5px 9px; font-size: 10px; white-space: nowrap; }
+  #move-home .mh-save-status { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; border: 1px solid var(--mh-line); border-radius: 999px; background: var(--mh-surface); color: var(--mh-muted); padding: 5px 9px; font-size: 10px; overflow-wrap: anywhere; }
   #move-home .mh-save-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--mh-green); }
   #move-home .mh-save-status[data-state="saving"]::before { background: var(--mh-amber); }
   #move-home .mh-save-status[data-state="error"]::before { background: #b65b4b; }
@@ -188,11 +192,11 @@
   #move-home .mh-inventory-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   #move-home .mh-inventory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
   #move-home .mh-inventory-item { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 58px; border: 1px solid var(--mh-line); border-radius: 11px; background: var(--mh-surface-2); color: var(--mh-ink); padding: 9px; text-align: left; }
-  #move-home .mh-inventory-item strong { font-size: 12px; }
-  #move-home .mh-inventory-item span { color: var(--mh-muted); font-size: 10px; }
+  #move-home .mh-inventory-item strong { max-width: 100%; font-size: 12px; overflow-wrap: anywhere; }
+  #move-home .mh-inventory-item span { max-width: 100%; color: var(--mh-muted); font-size: 10px; overflow-wrap: anywhere; }
   #move-home .mh-inventory-help { margin: 9px 0 0; color: var(--mh-muted); font-size: 11px; line-height: 1.4; }
   #move-home .mh-planner-dimensions { margin-top: 16px; }
-  #move-home .mh-room-filters { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 14px; margin-bottom: 4px; }
+  #move-home .mh-room-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0 14px; margin-bottom: 4px; }
   #move-home .mh-room-filter { border: 1px solid var(--mh-line); border-radius: 999px; background: var(--mh-surface); color: var(--mh-muted); padding: 8px 12px; white-space: nowrap; }
   #move-home .mh-room-filter[aria-pressed="true"] { background: var(--mh-ink); border-color: var(--mh-ink); color: var(--mh-bg); }
   #move-home .mh-room-section { margin-top: 22px; }
@@ -512,9 +516,9 @@
             <form class="mh-inline-form" id="mh-furniture-form">
               <div class="mh-inline-fields">
                 <div class="mh-field"><label for="mh-furniture-name">Name</label><input class="mh-input" id="mh-furniture-name" maxlength="80" required></div>
+                <div class="mh-field"><label for="mh-furniture-shape">Shape</label><select class="mh-select" id="mh-furniture-shape"><option value="rectangle">Rectangle</option><option value="circle">Circle</option></select></div>
                 <div class="mh-field"><label id="mh-furniture-length-label" for="mh-furniture-length">Length (in)</label><input class="mh-input" id="mh-furniture-length" type="number" min="1" max="300" step="0.5" required></div>
                 <div class="mh-field" id="mh-furniture-width-field"><label for="mh-furniture-width">Width (in)</label><input class="mh-input" id="mh-furniture-width" type="number" min="1" max="300" step="0.5" required></div>
-                <div class="mh-field"><label for="mh-furniture-shape">Shape</label><select class="mh-select" id="mh-furniture-shape"><option value="rectangle">Rectangle</option><option value="circle">Circle</option></select></div>
               </div>
               <p class="mh-inline-form-note" id="mh-furniture-form-note">This item will be added to the selected layout's shared cloud inventory.</p>
               <div class="mh-form-actions"><button class="mh-primary" id="mh-save-furniture" type="submit">Save to inventory</button><button class="mh-secondary" id="mh-cancel-furniture" type="button">Cancel</button></div>
