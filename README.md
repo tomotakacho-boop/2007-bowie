@@ -51,7 +51,7 @@ Furniture positions and the furniture inventory now autosave to Netlify Blobs af
 
 Use the **Cloud layout** menu to switch between public plans. **New layout** creates an independent blank plan with its own furniture inventory. **Copy share link** creates a direct URL to the selected layout so friends can open and edit it.
 
-Use **+ New** in the Furniture inventory to save a custom furniture name, length, width, and shape. To adjust an existing inventory item, select one of its placed copies and choose **Edit dimensions**. The updated dimensions apply to every copy of that item in the current layout and save to Netlify automatically.
+Use **+ New** in the Furniture inventory to save custom furniture. Choose **Rectangle** to enter length and width, or **Circle** to enter a single diameter; circular furniture renders as a true circle on the plan. To adjust an existing inventory item, select one of its placed copies and choose **Edit dimensions**. The updated dimensions and shape apply to every copy of that item in the current layout and save to Netlify automatically.
 
 On the first request after deployment, the function automatically migrates the previous Netlify-saved shared arrangement into **Tomo's layout**. No special browser, device, manual copy, secret key, or environment variable is needed to preserve it.
 

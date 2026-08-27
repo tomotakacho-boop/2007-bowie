@@ -512,9 +512,9 @@
             <form class="mh-inline-form" id="mh-furniture-form">
               <div class="mh-inline-fields">
                 <div class="mh-field"><label for="mh-furniture-name">Name</label><input class="mh-input" id="mh-furniture-name" maxlength="80" required></div>
-                <div class="mh-field"><label for="mh-furniture-length">Length (in)</label><input class="mh-input" id="mh-furniture-length" type="number" min="1" max="300" step="0.5" required></div>
-                <div class="mh-field"><label for="mh-furniture-width">Width (in)</label><input class="mh-input" id="mh-furniture-width" type="number" min="1" max="300" step="0.5" required></div>
-                <div class="mh-field"><label for="mh-furniture-shape">Shape</label><select class="mh-select" id="mh-furniture-shape"><option value="rectangle">Rectangle</option><option value="round">Round</option></select></div>
+                <div class="mh-field"><label id="mh-furniture-length-label" for="mh-furniture-length">Length (in)</label><input class="mh-input" id="mh-furniture-length" type="number" min="1" max="300" step="0.5" required></div>
+                <div class="mh-field" id="mh-furniture-width-field"><label for="mh-furniture-width">Width (in)</label><input class="mh-input" id="mh-furniture-width" type="number" min="1" max="300" step="0.5" required></div>
+                <div class="mh-field"><label for="mh-furniture-shape">Shape</label><select class="mh-select" id="mh-furniture-shape"><option value="rectangle">Rectangle</option><option value="circle">Circle</option></select></div>
               </div>
               <p class="mh-inline-form-note" id="mh-furniture-form-note">This item will be added to the selected layout's shared cloud inventory.</p>
               <div class="mh-form-actions"><button class="mh-primary" id="mh-save-furniture" type="submit">Save to inventory</button><button class="mh-secondary" id="mh-cancel-furniture" type="button">Cancel</button></div>
@@ -675,7 +675,9 @@
   const furnitureForm = root.querySelector('#mh-furniture-form');
   const furnitureNameInput = root.querySelector('#mh-furniture-name');
   const furnitureLengthInput = root.querySelector('#mh-furniture-length');
+  const furnitureLengthLabel = root.querySelector('#mh-furniture-length-label');
   const furnitureWidthInput = root.querySelector('#mh-furniture-width');
+  const furnitureWidthField = root.querySelector('#mh-furniture-width-field');
   const furnitureShapeInput = root.querySelector('#mh-furniture-shape');
   const furnitureFormNote = root.querySelector('#mh-furniture-form-note');
   const boardWidthInches = 373;
@@ -1109,6 +1111,7 @@
   function closeFurnitureForm() {
     editingFurnitureType = '';
     furnitureForm.reset();
+    updateFurnitureShapeFields();
     furnitureForm.classList.remove('is-open');
     furnitureFormNote.textContent = "This item will be added to the selected layout's shared cloud inventory.";
     root.querySelector('#mh-save-furniture').textContent = 'Save to inventory';
@@ -1121,7 +1124,8 @@
     furnitureNameInput.value = definition?.name || '';
     furnitureLengthInput.value = definition?.length || '';
     furnitureWidthInput.value = definition?.width || '';
-    furnitureShapeInput.value = definition?.round ? 'round' : 'rectangle';
+    furnitureShapeInput.value = definition?.round ? 'circle' : 'rectangle';
+    updateFurnitureShapeFields();
     furnitureFormNote.textContent = definition
       ? 'Saving updates this inventory item and every placed copy in the current cloud layout.'
       : "This item will be added to the selected layout's shared cloud inventory.";
@@ -1134,13 +1138,26 @@
     return 'custom-' + (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(16).slice(2));
   }
 
+  function updateFurnitureShapeFields() {
+    const isCircle = furnitureShapeInput.value === 'circle';
+    furnitureLengthLabel.textContent = isCircle ? 'Diameter (in)' : 'Length (in)';
+    furnitureWidthField.hidden = isCircle;
+    furnitureWidthInput.disabled = isCircle;
+    if (isCircle && furnitureLengthInput.value) furnitureWidthInput.value = furnitureLengthInput.value;
+  }
+
+  furnitureShapeInput.addEventListener('change', updateFurnitureShapeFields);
+  furnitureLengthInput.addEventListener('input', () => {
+    if (furnitureShapeInput.value === 'circle') furnitureWidthInput.value = furnitureLengthInput.value;
+  });
+
   furnitureForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!cloudLayoutReady) return;
     const length = Number(furnitureLengthInput.value);
-    let width = Number(furnitureWidthInput.value);
+    const isCircle = furnitureShapeInput.value === 'circle';
+    const width = isCircle ? length : Number(furnitureWidthInput.value);
     if (!furnitureNameInput.value.trim() || !Number.isFinite(length) || !Number.isFinite(width) || length < 1 || width < 1 || length > 300 || width > 300) return;
-    if (furnitureShapeInput.value === 'round') width = length;
     const type = editingFurnitureType || furnitureTypeId();
     const previous = furnitureCatalog[type] || {};
     const nextDefinition = {
@@ -1148,7 +1165,7 @@
       name: furnitureNameInput.value.trim().slice(0, 80),
       length,
       width,
-      round: furnitureShapeInput.value === 'round'
+      round: isCircle
     };
     if (!nextDefinition.round) delete nextDefinition.round;
     if (nextDefinition.footprints?.length) {
