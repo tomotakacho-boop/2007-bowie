@@ -7,6 +7,7 @@ const FURNITURE_TYPES = new Set([
   "tvconsole",
   "coffee",
   "couch",
+  "desk",
   "kitchenTable",
   "kitchenChair",
   "barCart",

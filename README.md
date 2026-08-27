@@ -26,6 +26,7 @@ The measured inventory currently contains:
 - TV console — 69 inches long × 18 inches wide
 - Coffee table — 39 inches long × 20 inches wide
 - Couch — 78 inches long × 39 inches wide
+- Desk — 40 inches long × 28 inches wide
 - Kitchen table — 40-inch diameter, with a selectable 10-inch extender that changes it to a 50 × 40-inch oval
 - Kitchen table chairs — four chairs, each 18 × 18 inches
 - Glass bar cart — 22 × 8 inches
