@@ -150,6 +150,17 @@
   #move-home .mh-approx { display: block; margin-top: 2px; color: var(--mh-muted); font-size: 10px; font-weight: 500; }
   #move-home .mh-dimension-note { margin: 12px 0 0; padding: 10px 11px; border-radius: 10px; background: var(--mh-green-soft); color: var(--mh-muted); font-size: 11px; line-height: 1.45; }
   #move-home .mh-planner-shell { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 18px; align-items: start; }
+  #move-home .mh-layout-cloudbar { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 12px; align-items: end; margin: 0 0 12px; padding: 12px; border: 1px solid var(--mh-line); border-radius: 14px; background: var(--mh-surface-2); }
+  #move-home .mh-layout-cloudbar label { display: block; margin-bottom: 5px; color: var(--mh-muted); font-size: 10px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+  #move-home .mh-cloud-layout-controls, #move-home .mh-inventory-actions { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  #move-home .mh-cloud-layout-controls .mh-select { min-width: 210px; }
+  #move-home .mh-cloud-note { grid-column: 1 / -1; margin: -2px 0 0; color: var(--mh-muted); font-size: 10px; }
+  #move-home .mh-inline-form { display: none; grid-column: 1 / -1; gap: 8px; padding-top: 10px; border-top: 1px solid var(--mh-line); }
+  #move-home .mh-inline-form.is-open { display: grid; }
+  #move-home .mh-inline-fields { display: grid; grid-template-columns: minmax(140px, 1.4fr) repeat(2, minmax(85px, .55fr)) minmax(105px, .6fr); gap: 8px; }
+  #move-home .mh-inline-form .mh-field label { font-size: 10px; }
+  #move-home .mh-inline-form .mh-input, #move-home .mh-inline-form .mh-select { min-height: 36px; padding: 7px 8px; }
+  #move-home .mh-inline-form-note { margin: 0; color: var(--mh-muted); font-size: 10px; line-height: 1.4; }
   #move-home .mh-planner-stage { min-width: 0; }
   #move-home .mh-planner-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   #move-home .mh-selection-label { flex: 1 1 170px; color: var(--mh-muted); font-size: 12px; }
@@ -174,6 +185,7 @@
   #move-home .mh-furniture { position: absolute; z-index: 4; display: grid; place-items: center; overflow: hidden; border: 2px solid var(--mh-green); border-radius: 7px; background: var(--mh-green-soft); color: var(--mh-ink); padding: 2px; box-shadow: 0 3px 10px var(--mh-shadow); font-size: clamp(7px, 1.15vw, 10px); font-weight: 750; line-height: 1.05; text-align: center; touch-action: none; }
   #move-home .mh-furniture.is-selected { outline: 3px solid var(--mh-amber); outline-offset: 2px; z-index: 5; }
   #move-home .mh-inventory { position: sticky; top: 12px; }
+  #move-home .mh-inventory-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   #move-home .mh-inventory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
   #move-home .mh-inventory-item { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 58px; border: 1px solid var(--mh-line); border-radius: 11px; background: var(--mh-surface-2); color: var(--mh-ink); padding: 9px; text-align: left; }
   #move-home .mh-inventory-item strong { font-size: 12px; }
@@ -251,6 +263,10 @@
     #move-home .mh-progress-card, #move-home .mh-next-card, #move-home .mh-two-thirds, #move-home .mh-one-third { grid-column: 1 / -1; }
     #move-home .mh-layout-grid { grid-template-columns: 1fr; }
     #move-home .mh-planner-shell { grid-template-columns: 1fr; }
+    #move-home .mh-layout-cloudbar { grid-template-columns: 1fr; align-items: stretch; }
+    #move-home .mh-cloud-note, #move-home .mh-inline-form { grid-column: auto; }
+    #move-home .mh-inline-fields { grid-template-columns: 1fr 1fr; }
+    #move-home .mh-inline-fields .mh-field:first-child { grid-column: 1 / -1; }
     #move-home .mh-inventory { position: static; }
     #move-home .mh-inspo-grid { grid-template-columns: 1fr 1fr; }
     #move-home .mh-guide-wide, #move-home .mh-guide-narrow { grid-column: 1 / -1; }
@@ -262,6 +278,10 @@
     #move-home .mh-guide-banner { flex-direction: column; }
     #move-home .mh-section-head { align-items: flex-start; flex-direction: column; }
     #move-home .mh-planner-toolbar .mh-secondary { padding: 7px 9px; font-size: 12px; }
+    #move-home .mh-cloud-layout-controls { align-items: stretch; }
+    #move-home .mh-cloud-layout-controls .mh-select { width: 100%; min-width: 0; }
+    #move-home .mh-inline-fields { grid-template-columns: 1fr; }
+    #move-home .mh-inline-fields .mh-field:first-child { grid-column: auto; }
   }
 </style>
 </head>
@@ -445,7 +465,25 @@
 
     <section class="mh-panel" data-view="layout" hidden>
       <div class="mh-section-head">
-        <div><h2>Plan the new apartment</h2><div class="mh-small">Compare the clean floorplan with your current furniture plan</div></div>
+        <div><h2>Plan the new apartment</h2><div class="mh-small">Create, share, and edit cloud-saved furniture plans</div></div>
+      </div>
+      <div class="mh-layout-cloudbar">
+        <div>
+          <label for="mh-layout-select">Cloud layout</label>
+          <div class="mh-cloud-layout-controls">
+            <select class="mh-select" id="mh-layout-select" aria-label="Choose a shared layout"><option>Loading layouts…</option></select>
+            <button class="mh-secondary" id="mh-new-layout" type="button">New layout</button>
+            <button class="mh-secondary" id="mh-copy-layout-link" type="button" disabled>Copy share link</button>
+          </div>
+        </div>
+        <span class="mh-save-status" id="mh-layout-save-status" data-state="saving" role="status" aria-live="polite">Connecting to Netlify…</span>
+        <p class="mh-cloud-note">Layouts and furniture inventories save to Netlify—not this browser. Anyone with a layout link can view and edit that shared plan.</p>
+        <form class="mh-inline-form" id="mh-layout-form">
+          <div class="mh-inline-fields">
+            <div class="mh-field"><label for="mh-layout-name">Layout name</label><input class="mh-input" id="mh-layout-name" maxlength="80" placeholder="Example: Jamie's layout" required></div>
+          </div>
+          <div class="mh-form-actions"><button class="mh-primary" type="submit">Create cloud layout</button><button class="mh-secondary" id="mh-cancel-layout" type="button">Cancel</button></div>
+        </form>
       </div>
       <div class="mh-toggle" aria-label="Floorplan view">
         <button class="mh-secondary mh-view-button" type="button" data-plan="planned" aria-pressed="true">My layout</button>
@@ -456,23 +494,33 @@
           <div class="mh-planner-toolbar" aria-label="Furniture controls">
             <span class="mh-selection-label" id="mh-selection-label">Select a furniture piece to edit it</span>
             <button class="mh-secondary" id="mh-rotate-furniture" type="button" disabled>Rotate</button>
+            <button class="mh-secondary" id="mh-edit-dimensions" type="button" disabled>Edit dimensions</button>
             <button class="mh-secondary" id="mh-change-orientation" type="button" hidden>Change shelf orientation</button>
             <button class="mh-secondary" id="mh-extend-table" type="button" hidden>Extend table</button>
             <button class="mh-secondary" id="mh-remove-furniture" type="button" disabled>Remove</button>
             <button class="mh-secondary" id="mh-reset-layout" type="button">Reset layout</button>
-            <span class="mh-save-status" id="mh-layout-save-status" data-state="saving" role="status" aria-live="polite">Connecting shared autosave…</span>
           </div>
           <div class="mh-floor-grid" id="mh-floor-grid" tabindex="0" aria-label="Interactive floor plan. Drag furniture to move it on the grid.">
             <img class="mh-floor-trace" src="assets/2007-bowie-clean-floorplan.png" alt="" aria-hidden="true">
           </div>
-          <p class="mh-footer-note">The original blueprint is locked beneath the grid so walls, doors, fixtures, counters, and the terrace outline stay visible. Furniture is scaled in inches, snaps every 6 inches, and autosaves to the shared layout after every change.</p>
+          <p class="mh-footer-note">The original blueprint is locked beneath the grid so walls, doors, fixtures, counters, and the terrace outline stay visible. Furniture is scaled in inches, snaps every 6 inches, and every change autosaves to the selected Netlify cloud layout.</p>
         </div>
         <div>
           <aside class="mh-surface mh-inventory">
-            <h3>Furniture inventory</h3>
+            <div class="mh-inventory-head"><h3>Furniture inventory</h3><button class="mh-secondary" id="mh-new-furniture" type="button">+ New</button></div>
             <p class="mh-dimension-intro">Measured footprints only—drag a piece onto the plan, or tap it to add it.</p>
+            <form class="mh-inline-form" id="mh-furniture-form">
+              <div class="mh-inline-fields">
+                <div class="mh-field"><label for="mh-furniture-name">Name</label><input class="mh-input" id="mh-furniture-name" maxlength="80" required></div>
+                <div class="mh-field"><label for="mh-furniture-length">Length (in)</label><input class="mh-input" id="mh-furniture-length" type="number" min="1" max="300" step="0.5" required></div>
+                <div class="mh-field"><label for="mh-furniture-width">Width (in)</label><input class="mh-input" id="mh-furniture-width" type="number" min="1" max="300" step="0.5" required></div>
+                <div class="mh-field"><label for="mh-furniture-shape">Shape</label><select class="mh-select" id="mh-furniture-shape"><option value="rectangle">Rectangle</option><option value="round">Round</option></select></div>
+              </div>
+              <p class="mh-inline-form-note" id="mh-furniture-form-note">This item will be added to the selected layout's shared cloud inventory.</p>
+              <div class="mh-form-actions"><button class="mh-primary" id="mh-save-furniture" type="submit">Save to inventory</button><button class="mh-secondary" id="mh-cancel-furniture" type="button">Cancel</button></div>
+            </form>
             <div class="mh-inventory-grid" id="mh-inventory-grid"></div>
-            <p class="mh-inventory-help">Drag placed furniture to move it. Select a piece to rotate or remove it. Arrow keys also nudge a selected piece.</p>
+            <p class="mh-inventory-help">Tap an inventory item to add it. Select a placed piece to rotate it, edit its shared inventory dimensions, or remove it. Arrow keys nudge a selected piece.</p>
           </aside>
           <aside class="mh-surface mh-planner-dimensions">
             <h3>Room dimensions</h3>
@@ -612,23 +660,33 @@
     });
   });
 
-  const plannerStorageKey = 'bowie-floor-planner-v3-blueprint-trace';
   const plannerGrid = root.querySelector('#mh-floor-grid');
   const selectionLabel = root.querySelector('#mh-selection-label');
   const rotateFurnitureButton = root.querySelector('#mh-rotate-furniture');
+  const editDimensionsButton = root.querySelector('#mh-edit-dimensions');
   const changeOrientationButton = root.querySelector('#mh-change-orientation');
   const extendTableButton = root.querySelector('#mh-extend-table');
   const removeFurnitureButton = root.querySelector('#mh-remove-furniture');
   const layoutSaveStatus = root.querySelector('#mh-layout-save-status');
+  const layoutSelect = root.querySelector('#mh-layout-select');
+  const layoutForm = root.querySelector('#mh-layout-form');
+  const layoutNameInput = root.querySelector('#mh-layout-name');
+  const copyLayoutLinkButton = root.querySelector('#mh-copy-layout-link');
+  const furnitureForm = root.querySelector('#mh-furniture-form');
+  const furnitureNameInput = root.querySelector('#mh-furniture-name');
+  const furnitureLengthInput = root.querySelector('#mh-furniture-length');
+  const furnitureWidthInput = root.querySelector('#mh-furniture-width');
+  const furnitureShapeInput = root.querySelector('#mh-furniture-shape');
+  const furnitureFormNote = root.querySelector('#mh-furniture-form-note');
   const boardWidthInches = 373;
   const boardHeightInches = boardWidthInches * 1382 / 1136;
   const snapInches = 6;
-  const furnitureCatalog = {
+  const baseFurnitureCatalog = {
     tvconsole: { name: 'TV console', length: 69, width: 18, description: '69″ L × 18″ W' },
     coffee: { name: 'Coffee table', length: 39, width: 20, description: '39″ L × 20″ W' },
     couch: { name: 'Couch', length: 78, width: 39, description: '78″ L × 39″ W' },
     desk: { name: 'Desk', length: 40, width: 28, description: '40″ L × 28″ W' },
-    kitchenTable: { name: 'Kitchen table', length: 40, width: 40, description: '40″ diameter · extends to 50″ × 40″', round: true, extendable: true },
+    kitchenTable: { name: 'Kitchen table', length: 40, width: 40, description: '40″ diameter · extends to 50″ × 40″', round: true, extendable: true, extension: 10 },
     kitchenChair: { name: 'Kitchen table chair', length: 18, width: 18, description: '18″ L × 18″ W · 4 chairs owned', quantity: 4 },
     barCart: { name: 'Glass bar cart', length: 22, width: 8, description: '22″ L × 8″ W' },
     marbleTable: { name: 'Small marble round table', length: 17.5, width: 17.5, description: '17.5″ diameter', round: true },
@@ -656,17 +714,21 @@
     { id: 'starter-couch', type: 'couch', x: 318, y: 230, rotated: true, extended: false },
     { id: 'starter-kitchen-table', type: 'kitchenTable', x: 244, y: 188, rotated: false, extended: false }
   ];
+  let furnitureCatalog = structuredClone(baseFurnitureCatalog);
   let placedFurniture = [];
   let selectedFurnitureId = '';
-  let sharedLayoutInitialized = false;
-  let sharedLayoutSaving = false;
-  let sharedLayoutSaveQueued = false;
-  let sharedLayoutSaveTimer = 0;
-  let sharedLayoutRetryTimer = 0;
-  let sharedLayoutInitializationTimer = 0;
-  let sharedLayoutRefreshInFlight = false;
-  let sharedLayoutHasLocalChanges = false;
-  let lastSharedLayoutUpdatedAt = '';
+  let layoutSummaries = [];
+  let activeLayoutId = '';
+  let activeLayoutName = '';
+  let cloudLayoutReady = false;
+  let cloudLayoutSaving = false;
+  let cloudLayoutSaveQueued = false;
+  let cloudLayoutSaveTimer = 0;
+  let cloudLayoutRetryTimer = 0;
+  let cloudLayoutRefreshInFlight = false;
+  let cloudLayoutHasChanges = false;
+  let lastCloudLayoutUpdatedAt = '';
+  let editingFurnitureType = '';
 
   function normalizeFurnitureLayout(value) {
     if (!Array.isArray(value)) return null;
@@ -681,143 +743,170 @@
     }));
   }
 
-  function readLocalFurnitureLayout() {
-    try {
-      const raw = localStorage.getItem(plannerStorageKey);
-      return raw === null ? null : normalizeFurnitureLayout(JSON.parse(raw));
-    } catch {
-      return null;
-    }
-  }
-
-  function saveFurnitureLocally(items = placedFurniture) {
-    try { localStorage.setItem(plannerStorageKey, JSON.stringify(items)); }
-    catch { /* Shared storage remains available when browser storage is unavailable. */ }
-  }
-
   function setLayoutSaveStatus(message, state = 'saved') {
     layoutSaveStatus.textContent = message;
     layoutSaveStatus.dataset.state = state;
   }
 
-  function sharedLayoutPayload() {
-    return placedFurniture.map((item) => ({
+  function cloudLayoutPayload() {
+    return {
+      name: activeLayoutName,
+      catalog: furnitureCatalog,
+      items: placedFurniture.map((item) => ({
       id: item.id,
       type: item.type,
       x: item.x,
       y: item.y,
       rotated: Boolean(item.rotated),
       orientation: item.orientation || 0,
-      extended: Boolean(item.extended)
-    }));
+        extended: Boolean(item.extended)
+      }))
+    };
   }
 
-  async function saveSharedFurnitureLayout() {
-    if (!sharedLayoutInitialized) return;
-    if (sharedLayoutSaving) {
-      sharedLayoutSaveQueued = true;
+  function renderLayoutOptions() {
+    layoutSelect.replaceChildren();
+    layoutSummaries.forEach((layout) => {
+      const option = document.createElement('option');
+      option.value = layout.id;
+      option.textContent = layout.name;
+      option.selected = layout.id === activeLayoutId;
+      layoutSelect.append(option);
+    });
+    layoutSelect.disabled = !layoutSummaries.length;
+    copyLayoutLinkButton.disabled = !activeLayoutId;
+  }
+
+  function setLayoutUrl(id) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('layout', id);
+    window.history.replaceState({}, '', url);
+  }
+
+  async function saveCloudFurnitureLayout() {
+    if (!cloudLayoutReady || !activeLayoutId) return;
+    if (cloudLayoutSaving) {
+      cloudLayoutSaveQueued = true;
       return;
     }
-    sharedLayoutSaving = true;
-    sharedLayoutSaveQueued = false;
-    clearTimeout(sharedLayoutRetryTimer);
-    sharedLayoutRetryTimer = 0;
-    const items = sharedLayoutPayload();
-    const savedSnapshot = JSON.stringify(items);
-    setLayoutSaveStatus('Saving shared layout…', 'saving');
+    cloudLayoutSaving = true;
+    cloudLayoutSaveQueued = false;
+    clearTimeout(cloudLayoutRetryTimer);
+    cloudLayoutRetryTimer = 0;
+    const savingLayoutId = activeLayoutId;
+    const body = cloudLayoutPayload();
+    const savedSnapshot = JSON.stringify(body);
+    setLayoutSaveStatus('Saving to Netlify…', 'saving');
     try {
-      const response = await fetch('/.netlify/functions/layout', {
+      const response = await fetch('/.netlify/functions/layout?id=' + encodeURIComponent(savingLayoutId), {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ items })
+        body: JSON.stringify(body)
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error || 'The shared layout could not be saved.');
-      lastSharedLayoutUpdatedAt = payload.layout?.updatedAt || '';
-      if (JSON.stringify(sharedLayoutPayload()) === savedSnapshot) sharedLayoutHasLocalChanges = false;
-      setLayoutSaveStatus('Shared layout saved');
+      if (!response.ok) throw new Error(payload.error || 'The cloud layout could not be saved.');
+      if (savingLayoutId === activeLayoutId) {
+        lastCloudLayoutUpdatedAt = payload.layout?.updatedAt || '';
+        if (JSON.stringify(cloudLayoutPayload()) === savedSnapshot) cloudLayoutHasChanges = false;
+        layoutSummaries = payload.layouts || layoutSummaries;
+        renderLayoutOptions();
+        setLayoutSaveStatus('Saved to Netlify');
+      }
     } catch {
-      setLayoutSaveStatus('Shared save will retry', 'error');
-      sharedLayoutSaveQueued = true;
-      sharedLayoutRetryTimer = window.setTimeout(() => {
-        sharedLayoutRetryTimer = 0;
-        sharedLayoutSaveQueued = false;
-        saveSharedFurnitureLayout();
+      setLayoutSaveStatus('Cloud save will retry', 'error');
+      cloudLayoutSaveQueued = true;
+      cloudLayoutRetryTimer = window.setTimeout(() => {
+        cloudLayoutRetryTimer = 0;
+        cloudLayoutSaveQueued = false;
+        saveCloudFurnitureLayout();
       }, 5000);
     } finally {
-      sharedLayoutSaving = false;
-      if (sharedLayoutSaveQueued && !sharedLayoutRetryTimer) {
-        sharedLayoutSaveQueued = false;
-        saveSharedFurnitureLayout();
+      cloudLayoutSaving = false;
+      if (cloudLayoutSaveQueued && !cloudLayoutRetryTimer) {
+        cloudLayoutSaveQueued = false;
+        saveCloudFurnitureLayout();
       }
     }
   }
 
   function saveFurnitureLayout(immediate = true) {
-    saveFurnitureLocally();
-    sharedLayoutHasLocalChanges = true;
-    if (!sharedLayoutInitialized) return;
-    clearTimeout(sharedLayoutSaveTimer);
-    sharedLayoutSaveTimer = 0;
-    if (immediate) saveSharedFurnitureLayout();
-    else sharedLayoutSaveTimer = window.setTimeout(() => {
-      sharedLayoutSaveTimer = 0;
-      saveSharedFurnitureLayout();
+    cloudLayoutHasChanges = true;
+    if (!cloudLayoutReady) return;
+    clearTimeout(cloudLayoutSaveTimer);
+    cloudLayoutSaveTimer = 0;
+    if (immediate) saveCloudFurnitureLayout();
+    else cloudLayoutSaveTimer = window.setTimeout(() => {
+      cloudLayoutSaveTimer = 0;
+      saveCloudFurnitureLayout();
     }, 450);
   }
 
-  async function initializeSharedFurnitureLayout() {
-    clearTimeout(sharedLayoutInitializationTimer);
-    const localLayout = readLocalFurnitureLayout();
-    setLayoutSaveStatus('Connecting shared autosave…', 'saving');
+  async function loadCloudLayout(id) {
+    cloudLayoutReady = false;
+    setLayoutSaveStatus('Loading cloud layout…', 'saving');
+    const response = await fetch('/.netlify/functions/layout?id=' + encodeURIComponent(id), { headers: { accept: 'application/json' } });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.layout) throw new Error(payload.error || 'The cloud layout could not be loaded.');
+    activeLayoutId = payload.layout.id;
+    activeLayoutName = payload.layout.name;
+    furnitureCatalog = payload.layout.catalog && Object.keys(payload.layout.catalog).length
+      ? payload.layout.catalog
+      : structuredClone(baseFurnitureCatalog);
+    placedFurniture = normalizeFurnitureLayout(payload.layout.items) || [];
+    selectedFurnitureId = '';
+    lastCloudLayoutUpdatedAt = payload.layout.updatedAt || '';
+    cloudLayoutHasChanges = false;
+    cloudLayoutReady = true;
+    setLayoutUrl(activeLayoutId);
+    renderLayoutOptions();
+    renderInventory();
+    renderFurniture();
+    closeFurnitureForm();
+    setLayoutSaveStatus('Cloud layout loaded');
+  }
+
+  async function initializeCloudLayouts() {
+    setLayoutSaveStatus('Connecting to Netlify…', 'saving');
     try {
       const response = await fetch('/.netlify/functions/layout', { headers: { accept: 'application/json' } });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error || 'The shared layout could not be loaded.');
-      const remoteItems = payload.layout && Array.isArray(payload.layout.items)
-        ? normalizeFurnitureLayout(payload.layout.items)
-        : null;
-      sharedLayoutInitialized = true;
-      if (remoteItems && !sharedLayoutHasLocalChanges) {
-        placedFurniture = remoteItems;
-        selectedFurnitureId = '';
-        lastSharedLayoutUpdatedAt = payload.layout.updatedAt || '';
-        saveFurnitureLocally();
-        renderFurniture();
-        setLayoutSaveStatus('Shared layout loaded');
-      } else if (localLayout || sharedLayoutHasLocalChanges) {
-        placedFurniture = readLocalFurnitureLayout() || localLayout || placedFurniture;
-        renderFurniture();
-        await saveSharedFurnitureLayout();
-      } else {
-        setLayoutSaveStatus('Shared autosave ready');
-      }
+      if (!response.ok || !Array.isArray(payload.layouts) || !payload.layouts.length) throw new Error(payload.error || 'No layouts are available.');
+      layoutSummaries = payload.layouts;
+      const requestedId = new URL(window.location.href).searchParams.get('layout');
+      const selected = layoutSummaries.some((layout) => layout.id === requestedId)
+        ? requestedId
+        : (layoutSummaries.find((layout) => layout.id === 'main')?.id || layoutSummaries[0].id);
+      renderLayoutOptions();
+      await loadCloudLayout(selected);
     } catch {
-      sharedLayoutInitialized = false;
-      setLayoutSaveStatus('Using local copy · reconnecting', 'error');
-      sharedLayoutInitializationTimer = window.setTimeout(initializeSharedFurnitureLayout, 5000);
+      cloudLayoutReady = false;
+      furnitureCatalog = structuredClone(baseFurnitureCatalog);
+      placedFurniture = [];
+      renderInventory();
+      renderFurniture();
+      setLayoutSaveStatus('Netlify connection required', 'error');
     }
   }
 
-  async function refreshSharedFurnitureLayout() {
-    if (!sharedLayoutInitialized || sharedLayoutSaving || sharedLayoutSaveTimer || sharedLayoutRetryTimer || sharedLayoutSaveQueued || sharedLayoutHasLocalChanges || sharedLayoutRefreshInFlight) return;
-    sharedLayoutRefreshInFlight = true;
+  async function refreshCloudFurnitureLayout() {
+    if (!cloudLayoutReady || !activeLayoutId || cloudLayoutSaving || cloudLayoutSaveTimer || cloudLayoutRetryTimer || cloudLayoutSaveQueued || cloudLayoutHasChanges || cloudLayoutRefreshInFlight) return;
+    cloudLayoutRefreshInFlight = true;
     try {
-      const response = await fetch('/.netlify/functions/layout', { headers: { accept: 'application/json' } });
+      const response = await fetch('/.netlify/functions/layout?id=' + encodeURIComponent(activeLayoutId), { headers: { accept: 'application/json' } });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok || !payload.layout || payload.layout.updatedAt === lastSharedLayoutUpdatedAt) return;
-      const remoteItems = normalizeFurnitureLayout(payload.layout.items);
-      if (!remoteItems) return;
-      placedFurniture = remoteItems;
+      if (!response.ok || !payload.layout || payload.layout.updatedAt === lastCloudLayoutUpdatedAt) return;
+      activeLayoutName = payload.layout.name;
+      furnitureCatalog = payload.layout.catalog;
+      placedFurniture = normalizeFurnitureLayout(payload.layout.items) || [];
       selectedFurnitureId = '';
-      lastSharedLayoutUpdatedAt = payload.layout.updatedAt || '';
-      saveFurnitureLocally();
+      lastCloudLayoutUpdatedAt = payload.layout.updatedAt || '';
+      renderInventory();
       renderFurniture();
-      setLayoutSaveStatus('Latest shared layout loaded');
+      setLayoutSaveStatus('Latest cloud changes loaded');
     } catch {
-      setLayoutSaveStatus('Could not check shared layout', 'error');
+      setLayoutSaveStatus('Could not refresh layout', 'error');
     } finally {
-      sharedLayoutRefreshInFlight = false;
+      cloudLayoutRefreshInFlight = false;
     }
   }
 
@@ -826,7 +915,9 @@
     const orientationCount = definition.footprints?.length || 1;
     const orientationIndex = Math.min(orientationCount - 1, Math.max(0, item.orientation || 0));
     const footprint = definition.footprints?.[orientationIndex];
-    const horizontalLength = definition.extendable && item.extended ? 50 : (footprint?.length || definition.length);
+    const horizontalLength = definition.extendable && item.extended
+      ? definition.length + (definition.extension || 10)
+      : (footprint?.length || definition.length);
     const horizontalWidth = footprint?.width || definition.width;
     return {
       width: item.rotated ? horizontalWidth : horizontalLength,
@@ -848,6 +939,7 @@
     const item = placedFurniture.find((entry) => entry.id === selectedFurnitureId);
     const definition = item ? furnitureCatalog[item.type] : null;
     rotateFurnitureButton.disabled = !item;
+    editDimensionsButton.disabled = !item;
     removeFurnitureButton.disabled = !item;
     changeOrientationButton.hidden = !definition?.footprints;
     if (definition?.footprints) {
@@ -856,7 +948,7 @@
       changeOrientationButton.textContent = 'Set shelf ' + definition.footprints[nextIndex].name;
     }
     extendTableButton.hidden = !definition?.extendable;
-    extendTableButton.textContent = item?.extended ? 'Remove extender' : 'Add 10″ extender';
+    extendTableButton.textContent = item?.extended ? 'Remove extender' : 'Add ' + (definition?.extension || 10) + '″ extender';
     selectionLabel.textContent = item ? definition.name + ' selected · ' + furnitureLabel(item) : 'Select a furniture piece to edit it';
     plannerGrid.querySelectorAll('.mh-furniture').forEach((element) => element.classList.toggle('is-selected', element.dataset.id === selectedFurnitureId));
   }
@@ -876,7 +968,7 @@
 
   function furnitureLabel(item) {
     const definition = furnitureCatalog[item.type];
-    if (definition.extendable && item.extended) return '50″ L × 40″ W';
+    if (definition.extendable && item.extended) return (definition.length + (definition.extension || 10)) + '″ L × ' + definition.width + '″ W';
     if (definition.round) return definition.length + '″ diameter';
     if (definition.footprints) {
       const orientationIndex = Math.min(definition.footprints.length - 1, Math.max(0, item.orientation || 0));
@@ -985,22 +1077,156 @@
   }
 
   const inventoryGrid = root.querySelector('#mh-inventory-grid');
-  Object.entries(furnitureCatalog).forEach(([type, definition]) => {
-    const button = document.createElement('button');
-    button.className = 'mh-inventory-item';
-    button.type = 'button';
-    button.draggable = true;
-    const title = document.createElement('strong');
-    title.textContent = definition.name;
-    const size = document.createElement('span');
-    size.textContent = definition.description;
-    button.append(title, size);
-    button.addEventListener('click', () => addFurniture(type));
-    button.addEventListener('dragstart', (event) => {
-      event.dataTransfer.effectAllowed = 'copy';
-      event.dataTransfer.setData('text/furniture-type', type);
+  function definitionDescription(definition) {
+    if (definition.extendable) return definition.length + '″ diameter · extends to ' + (definition.length + (definition.extension || 10)) + '″ × ' + definition.width + '″';
+    if (definition.round) return definition.length + '″ diameter';
+    if (definition.footprints?.length) return definition.length + '″ L × ' + definition.width + '″ W · ' + definition.footprints.length + ' orientations';
+    return definition.length + '″ L × ' + definition.width + '″ W';
+  }
+
+  function renderInventory() {
+    inventoryGrid.replaceChildren();
+    Object.entries(furnitureCatalog).forEach(([type, definition]) => {
+      definition.description = definitionDescription(definition);
+      const button = document.createElement('button');
+      button.className = 'mh-inventory-item';
+      button.type = 'button';
+      button.draggable = true;
+      const title = document.createElement('strong');
+      title.textContent = definition.name;
+      const size = document.createElement('span');
+      size.textContent = definition.description;
+      button.append(title, size);
+      button.addEventListener('click', () => addFurniture(type));
+      button.addEventListener('dragstart', (event) => {
+        event.dataTransfer.effectAllowed = 'copy';
+        event.dataTransfer.setData('text/furniture-type', type);
+      });
+      inventoryGrid.append(button);
     });
-    inventoryGrid.append(button);
+  }
+
+  function closeFurnitureForm() {
+    editingFurnitureType = '';
+    furnitureForm.reset();
+    furnitureForm.classList.remove('is-open');
+    furnitureFormNote.textContent = "This item will be added to the selected layout's shared cloud inventory.";
+    root.querySelector('#mh-save-furniture').textContent = 'Save to inventory';
+  }
+
+  function openFurnitureForm(type = '') {
+    if (!cloudLayoutReady) return;
+    editingFurnitureType = type;
+    const definition = type ? furnitureCatalog[type] : null;
+    furnitureNameInput.value = definition?.name || '';
+    furnitureLengthInput.value = definition?.length || '';
+    furnitureWidthInput.value = definition?.width || '';
+    furnitureShapeInput.value = definition?.round ? 'round' : 'rectangle';
+    furnitureFormNote.textContent = definition
+      ? 'Saving updates this inventory item and every placed copy in the current cloud layout.'
+      : "This item will be added to the selected layout's shared cloud inventory.";
+    root.querySelector('#mh-save-furniture').textContent = definition ? 'Save changes' : 'Save to inventory';
+    furnitureForm.classList.add('is-open');
+    furnitureNameInput.focus();
+  }
+
+  function furnitureTypeId() {
+    return 'custom-' + (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(16).slice(2));
+  }
+
+  furnitureForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!cloudLayoutReady) return;
+    const length = Number(furnitureLengthInput.value);
+    let width = Number(furnitureWidthInput.value);
+    if (!furnitureNameInput.value.trim() || !Number.isFinite(length) || !Number.isFinite(width) || length < 1 || width < 1 || length > 300 || width > 300) return;
+    if (furnitureShapeInput.value === 'round') width = length;
+    const type = editingFurnitureType || furnitureTypeId();
+    const previous = furnitureCatalog[type] || {};
+    const nextDefinition = {
+      ...previous,
+      name: furnitureNameInput.value.trim().slice(0, 80),
+      length,
+      width,
+      round: furnitureShapeInput.value === 'round'
+    };
+    if (!nextDefinition.round) delete nextDefinition.round;
+    if (nextDefinition.footprints?.length) {
+      nextDefinition.footprints = nextDefinition.footprints.map((footprint, index) => index === 0
+        ? { ...footprint, length, width }
+        : footprint);
+    }
+    nextDefinition.description = definitionDescription(nextDefinition);
+    furnitureCatalog[type] = nextDefinition;
+    placedFurniture.filter((item) => item.type === type).forEach(clampFurniture);
+    closeFurnitureForm();
+    renderInventory();
+    renderFurniture();
+    saveFurnitureLayout();
+  });
+
+  root.querySelector('#mh-new-furniture').addEventListener('click', () => openFurnitureForm());
+  root.querySelector('#mh-cancel-furniture').addEventListener('click', closeFurnitureForm);
+
+  editDimensionsButton.addEventListener('click', () => {
+    const item = placedFurniture.find((entry) => entry.id === selectedFurnitureId);
+    if (item) openFurnitureForm(item.type);
+  });
+
+  root.querySelector('#mh-new-layout').addEventListener('click', () => {
+    layoutForm.classList.add('is-open');
+    layoutNameInput.focus();
+  });
+  root.querySelector('#mh-cancel-layout').addEventListener('click', () => {
+    layoutForm.reset();
+    layoutForm.classList.remove('is-open');
+  });
+  layoutForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = layoutNameInput.value.trim();
+    if (!name) return;
+    const submitButton = layoutForm.querySelector('[type="submit"]');
+    submitButton.disabled = true;
+    setLayoutSaveStatus('Creating layout…', 'saving');
+    try {
+      const response = await fetch('/.netlify/functions/layout', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.layout) throw new Error(payload.error || 'The layout could not be created.');
+      layoutSummaries = payload.layouts || [...layoutSummaries, payload.layout];
+      layoutForm.reset();
+      layoutForm.classList.remove('is-open');
+      await loadCloudLayout(payload.layout.id);
+    } catch {
+      setLayoutSaveStatus('Could not create layout', 'error');
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  layoutSelect.addEventListener('change', async () => {
+    if (!layoutSelect.value || layoutSelect.value === activeLayoutId) return;
+    if (cloudLayoutHasChanges) await saveCloudFurnitureLayout();
+    try { await loadCloudLayout(layoutSelect.value); }
+    catch {
+      renderLayoutOptions();
+      setLayoutSaveStatus('Could not switch layouts', 'error');
+    }
+  });
+
+  copyLayoutLinkButton.addEventListener('click', async () => {
+    if (!activeLayoutId) return;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('layout', activeLayoutId);
+    try {
+      await navigator.clipboard.writeText(shareUrl.href);
+      setLayoutSaveStatus('Share link copied');
+    } catch {
+      window.prompt('Copy this layout link:', shareUrl.href);
+    }
   });
 
   plannerGrid.addEventListener('dragover', (event) => {
@@ -1071,11 +1297,11 @@
     saveFurnitureLayout();
   });
   window.addEventListener('resize', renderFurniture);
-  window.addEventListener('focus', refreshSharedFurnitureLayout);
-  const locallySavedFurniture = readLocalFurnitureLayout();
-  placedFurniture = locallySavedFurniture || defaultFurniture.map((item) => ({ ...item }));
+  window.addEventListener('focus', refreshCloudFurnitureLayout);
+  placedFurniture = [];
+  renderInventory();
   renderFurniture();
-  initializeSharedFurnitureLayout();
+  initializeCloudLayouts();
 
   const storageKey = 'bowie-move-planner-v1';
 

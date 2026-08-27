@@ -1,4 +1,4 @@
-# 2007 Bowie Move Planner — Move-Day Guide Build
+# 2007 Bowie Move Planner — Shared Layouts Build
 
 This build includes the move checklist, an inch-scaled graph-paper floor planner traced directly from the clean 2007 Bowie blueprint, a room dimensions table, and a room-by-room inspiration gallery with photo uploads stored in Netlify Blobs.
 
@@ -45,11 +45,15 @@ The desk nook is shown in its actual built-in position at the kitchen/living bou
 
 The blueprint is now the locked base layer of the interactive editor. This preserves the original wall locations and thicknesses, terrace recess, doors, closet shelving and shoe storage, bathroom fixtures, kitchen counters, entry door, WH/HP closet, washer/dryer closet, desk nook, and terrace door. Furniture remains interactive above the blueprint and graph grid.
 
-Furniture positions now autosave to Netlify Blobs after every addition, move, rotation, orientation change, table extension, removal, or reset. Friends opening the same Netlify project see and edit the same shared layout. A local browser copy remains as a temporary fallback if the shared save is briefly unavailable.
+Furniture positions and the furniture inventory now autosave to Netlify Blobs after every addition, move, rotation, dimension edit, orientation change, table extension, removal, or reset. The layout editor does not use browser storage as a fallback.
 
-### Preserve the layout already on your computer
+### Shared layouts and furniture
 
-After deploying this build, first open the live site using the same browser, device, and site address where you created the current layout. The page displays that existing local arrangement immediately. Because the shared layout is initially empty, it then migrates the exact saved arrangement to Netlify automatically. Open it yourself once before sending the updated site to friends.
+Use the **Cloud layout** menu to switch between public plans. **New layout** creates an independent blank plan with its own furniture inventory. **Copy share link** creates a direct URL to the selected layout so friends can open and edit it.
+
+Use **+ New** in the Furniture inventory to save a custom furniture name, length, width, and shape. To adjust an existing inventory item, select one of its placed copies and choose **Edit dimensions**. The updated dimensions apply to every copy of that item in the current layout and save to Netlify automatically.
+
+On the first request after deployment, the function automatically migrates the previous Netlify-saved shared arrangement into **Tomo's layout**. No special browser, device, manual copy, secret key, or environment variable is needed to preserve it.
 
 ## Upload to GitHub
 
@@ -61,7 +65,7 @@ If you are replacing the previous build, overwrite the repository with the files
 
 1. Connect the GitHub repository to Netlify, or let the existing Netlify project redeploy after your GitHub update.
 2. Netlify will read `netlify.toml`; no build command or environment variable is required.
-3. After deployment, open the site and test **Inspiration → Add inspiration** with a small JPEG, PNG, or WebP photo.
+3. After deployment, open **Layout** and confirm **Tomo's layout** appears. Create a temporary layout, add custom furniture, and copy its share link to confirm cloud storage is active.
 
 ## Inspiration rooms
 
@@ -77,10 +81,10 @@ Use **All rooms** to see room sections together, or choose one room to filter th
 
 ## Storage behavior
 
-Inspiration photos, inspiration details, and the interactive furniture layout are stored in Netlify Blobs, so they sync across devices. Adding, editing, deleting, or rearranging content does not require a password or private key.
+Inspiration photos, inspiration details, every interactive furniture layout, and each layout's furniture inventory are stored in Netlify Blobs, so they sync across devices. Adding, editing, or rearranging content does not require a password, private key, or browser storage.
 
-Friends who open the same live Netlify site can add photos and rearrange furniture. Their saved changes become the shared version for everyone using that Netlify project. Returning to the tab also checks for a newer shared layout. A custom domain and the site's `netlify.app` address share the same server data when both point to this Netlify project. A separately deployed Netlify project has its own data.
+Friends who open the same live Netlify site can create their own layouts, add custom furniture, and edit any layout whose link they have. Each layout has a stable `?layout=...` URL. Returning to the tab checks Netlify for newer changes. A custom domain and the site's `netlify.app` address share the same server data when both point to this Netlify project. A separately deployed Netlify project has its own data.
 
 The checklist is stored in the current browser. Checklist progress will not automatically sync to another device.
 
-Because there is no authentication, anyone who discovers the public site address could change the layout or add, edit, and delete inspiration items. This is intentional for this personal build.
+Because there is no authentication, anyone who discovers the public site address can view or change cloud layouts, create additional layouts and furniture, or add, edit, and delete inspiration items. This is intentional for this personal build.
